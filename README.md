@@ -2,6 +2,8 @@
 
 A sample project for moil system 6 views display, tested both on ubuntu 18.04 and raspberrypi( Raspbian Buster ) 
 
+![screenshot](https://github.com/cjchng/mainmoil_6view/blob/master/images/screenshot.png?raw=true)
+
 ## 1. Requirement 
 
 If you already have Opencv installed, the followings can be skipped. Opencv can be any version, 3.2.0 is recommented. 
