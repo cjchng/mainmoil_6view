@@ -1,5 +1,5 @@
-#ifndef MOILDEVSLIM_H
-#define MOILDEVSLIM_H
+#ifndef MOILDEV_H
+#define MOILDEV_H
 
 #include <stdio.h>
 #include <string.h>
@@ -15,12 +15,12 @@
 
 using namespace std;
 
-class  Moildevslim
+class  Moildev
 {
 public:
     class ConfigData* configData;
 
-    Moildevslim();
+    Moildev();
     bool Config(string cameraName, double cameraSensorWidth, double cameraSensorHeight,
         double iCx, double iCy, double i_ratio,
         double imageWidth, double imageHeight, double calibrationRatio,

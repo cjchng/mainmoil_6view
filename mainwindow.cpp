@@ -1,11 +1,11 @@
 #include "mainwindow.h"
-#include "moildevslim.h"
+#include "moildev.h"
 #define MAP_CACHE_ENABLED true
 
 MainWindow::MainWindow()
 {
 
-    Moildevslim md ;
+    Moildev md ;
     Mat image_input, image_input_s;
     Mat image_display[6];
 
@@ -18,7 +18,7 @@ MainWindow::MainWindow()
     double calibrationWidth = md.getImageWidth();
 double iCy = md.getiCy();
 ConfigData *cd = md.getcd();
-    image_input = imread( "image.jpg", IMREAD_COLOR);
+    image_input = imread( "images/image.jpg", IMREAD_COLOR);
     double w = image_input.cols;
     double h = image_input.rows;
     Mat mapX[6], mapY[6];
