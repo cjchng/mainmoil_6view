@@ -1,0 +1,2 @@
+#!/bin/bash
+g++ -o main.out main.cpp mainwindow.cpp moildevslim.cpp configdata.cpp `pkg-config --cflags opencv` `pkg-config --libs opencv` 
