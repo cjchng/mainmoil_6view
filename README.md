@@ -39,9 +39,15 @@ to run mainmoil,
 
 Key operations:
 
-	c : start/stop camera
-	0 : switch to original image
-	1..6 : switch to channel 1..6
+	c : start camera
+	0 : 6 channels view
+	1 : Original 
+	2..7 : channel 1..6
+	8 : Panorama 
+	up/down : alpha +/-
+	left/right : beta +/-
+	+/- : zoom +/-
+	r : reset alpha, beta, zoom   
 	esc : exit
 
 ## 4. Options 
