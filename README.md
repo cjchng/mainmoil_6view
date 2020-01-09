@@ -39,10 +39,10 @@ to run mainmoil,
 
 Key operations:
 
-c : start/stop camera
-0 : switch to original image
-1..6 : switch to channel 1..6
-esc : exit
+	c : start/stop camera
+	0 : switch to original image
+	1..6 : switch to channel 1..6
+	esc : exit
 
 ## 4. Options 
 
