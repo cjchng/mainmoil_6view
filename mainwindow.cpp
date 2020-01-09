@@ -4,11 +4,7 @@
 
 MainWindow::MainWindow()
 {
-
     Moildev md ;
-    Mat image_input, image_input_s;
-    Mat image_display[6];
-
 // repo220_T2
     md.Config("car", 1.4, 1.4,
         1320.0, 1017.0, 1.048,
@@ -21,7 +17,6 @@ ConfigData *cd = md.getcd();
     image_input = imread( "images/image.jpg", IMREAD_COLOR);
     double w = image_input.cols;
     double h = image_input.rows;
-    Mat mapX[6], mapY[6];
 
     mapX[0] = Mat(h, w, CV_32F);
     mapX[1] = Mat(w, h, CV_32F);
@@ -87,11 +82,23 @@ else {
 
     Vec3b p(0,0,0) ;
     image_input.at<Vec3b>(0, 0) = p;
-int x_base = 80;
-int y_base = 30;
 
-int width_split = (1920-100)/3 ;
-int height_split = width_split*3/4 ;
+    DisplayCh(0);
+
+ char c;
+ while(1){ 
+     c = waitKey( 100 );
+     if(c == 27) break;
+     if(c == 'c') {
+            openCamara();
+     } 
+     }
+
+}
+void MainWindow::DisplayCh(int Ch)
+{
+Mat image_result, image_resultv;
+if( image_input.empty()) return ;
 
 // original image
 
@@ -133,9 +140,9 @@ int height_split = width_split*3/4 ;
     imshow("Lower right", image_display[4]);
     moveWindow("Lower right", x_base+width_split*2, height_split+y_base);
 
- while(1){ if(waitKey(100)== 27) break; }
-
 }
+
+
 
 void MainWindow::Rotate(Mat& src, Mat& dst, double angle)
 {
@@ -200,7 +207,26 @@ void MainWindow::camButtonClicked()
 
 void MainWindow::openCamara()
 {
+    cap0.open(0);
+    cap0.set(CV_CAP_PROP_FRAME_WIDTH,2592);
+    cap0.set(CV_CAP_PROP_FRAME_HEIGHT,1944); 
 
+    if ( cap0.isOpened() ) {   
+    for(;;)
+    {
+          // Mat frame;
+          cap0 >> image_input;
+
+    if (( image_input.cols != fix_width ) || ( image_input.rows != fix_height ))
+    cv::resize(image_input, image_input, Size(fix_width, fix_height));
+
+
+          if( image_input.empty() ) break; // end of video stream
+          // imshow("Camera", image_input);
+          DisplayCh(0);
+          if( waitKey(33) == 27 ) break; // stop capturing by pressing ESC 
+    }
+    }
 }
 
 void MainWindow::readFarme()
