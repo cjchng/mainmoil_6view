@@ -59,7 +59,7 @@ else {
     md.AnyPointM((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 4, m_ratio);      // Down view ( zoom: 2/4 )
     md.AnyPointM((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, 70, 225, 4, m_ratio);   // left-lower view, rotate 180
     md.AnyPointM((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, 70, 135, 4, m_ratio);   // right-lower view, rotate 180
-    md.PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 180 );   // panorama
+    md.PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 110 );   // panorama
 for (i=0;i<7;i++) {
     sprintf(str_x, "matX%d", i);sprintf(str_y, "matY%d", i);
     MatWrite(str_x,mapX[i]);
@@ -77,7 +77,7 @@ else {
     md.AnyPointM((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 4, m_ratio);      // Down view ( zoom: 2/4 )
     md.AnyPointM((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, 70, 225, 4, m_ratio);   // left-lower view, rotate 180
     md.AnyPointM((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, 70, 135, 4, m_ratio);   // right-lower view, rotate 180
-    md.PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 180);   // panorama
+    md.PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 110);   // panorama
 }
 
     double time_clock = (double)(clock() - tStart)/CLOCKS_PER_SEC ;

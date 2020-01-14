@@ -13,7 +13,7 @@
 #define PCT_UNIT_WIDTH 1.27
 #define PCT_UNIT_HEIGHT 1.27
 #define FOCAL_LENGTH_FOR_ZOOM 250
-#define APPROX_FACT 4
+#define APPROX_FACT 8
 
 using namespace std;
 
