@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef CAR6VIEW_H
+#define CAR6VIEW_H
 #include <stdio.h>
 #include <string.h>
 #include <opencv2/opencv.hpp>
@@ -8,25 +8,29 @@
 #include <time.h>
 #include <iostream>
 #include <fstream>
-#include "moildev.h"
+#include <termios.h>  
+#include <unistd.h> 
+
+#include "../../moildev.h"
 using namespace std;
 using namespace cv;
 
 namespace Ui {
-class MainWindow;
+class Car6view;
 }
 
-class MainWindow 
+class Car6view 
 {
 
 public:
-    MainWindow();
-    ~MainWindow();
+    Car6view();
+    void Show();
+    ~Car6view();
 
 
 private:
 
-    Moildev md ;
+    Moildev *md ;
     Mat image_input, image_input_s;
     Mat image_display[7];
     Mat mapX[7], mapY[7];
@@ -65,7 +69,8 @@ private:
     void Rotate(Mat& src, Mat& dst, double angle);
     void MatWrite(const string& filename, const Mat& mat);
     Mat MatRead(const string& filename);
+    void freeMemory();
 
 };
 
-#endif // MAINWINDOW_H
+#endif 

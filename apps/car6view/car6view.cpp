@@ -1,18 +1,23 @@
-#include "mainwindow.h"
-// #include "moildev.h"
+#include "car6view.h"
 #define MAP_CACHE_ENABLED true
 #define USE_PICAMERA true
-MainWindow::MainWindow()
-{
+Car6view::Car6view(){
+    md = new Moildev();
+}
+void Car6view::Show() {
 // repo220_T2
-    md.Config("car", 1.4, 1.4,
+
+//cout << "test" << endl;
+//return ;
+
+    md->Config("car", 1.4, 1.4,
         1320.0, 1017.0, 1.048,
         2592, 1944, 4.05,
         0, 0, 0, 0, -47.96, 222.86
         );
-    double calibrationWidth = md.getImageWidth();
-double iCy = md.getiCy();
-ConfigData *cd = md.getcd();
+    double calibrationWidth = md->getImageWidth();
+double iCy = md->getiCy();
+ConfigData *cd = md->getcd();
     image_input = imread( "images/image.jpg", IMREAD_COLOR);
     MediaType mediaType = MediaType::IMAGE_FILE;
     double w = image_input.cols;
@@ -53,13 +58,13 @@ for (i=0;i<7;i++) {
 }
 }
 else {
-    md.AnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, 0, 0, 4, m_ratio);       // front view
-    md.AnyPointM((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, 70, 270, 4, m_ratio);   // left view, rotate 90
-    md.AnyPointM((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, 70, 90, 4, m_ratio);    // right view, rotate -90
-    md.AnyPointM((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 4, m_ratio);      // Down view ( zoom: 2/4 )
-    md.AnyPointM((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, 70, 225, 4, m_ratio);   // left-lower view, rotate 180
-    md.AnyPointM((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, 70, 135, 4, m_ratio);   // right-lower view, rotate 180
-    md.PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 110 );   // panorama
+    md->AnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, 0, 0, 4, m_ratio);       // front view
+    md->AnyPointM((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, 70, 270, 4, m_ratio);   // left view, rotate 90
+    md->AnyPointM((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, 70, 90, 4, m_ratio);    // right view, rotate -90
+    md->AnyPointM((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 4, m_ratio);      // Down view ( zoom: 2/4 )
+    md->AnyPointM((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, 70, 225, 4, m_ratio);   // left-lower view, rotate 180
+    md->AnyPointM((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, 70, 135, 4, m_ratio);   // right-lower view, rotate 180
+    md->PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 110 );   // panorama
 for (i=0;i<7;i++) {
     sprintf(str_x, "matX%d", i);sprintf(str_y, "matY%d", i);
     MatWrite(str_x,mapX[i]);
@@ -71,13 +76,13 @@ for (i=0;i<7;i++) {
 
 }
 else {
-    md.AnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, 0, 0, 4, m_ratio);       // front view
-    md.AnyPointM((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, 70, 270, 4, m_ratio);   // left view, rotate 90
-    md.AnyPointM((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, 60, 90, 4, m_ratio);    // right view, rotate -90
-    md.AnyPointM((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 4, m_ratio);      // Down view ( zoom: 2/4 )
-    md.AnyPointM((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, 70, 225, 4, m_ratio);   // left-lower view, rotate 180
-    md.AnyPointM((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, 70, 135, 4, m_ratio);   // right-lower view, rotate 180
-    md.PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 110);   // panorama
+    md->AnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, 0, 0, 4, m_ratio);       // front view
+    md->AnyPointM((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, 70, 270, 4, m_ratio);   // left view, rotate 90
+    md->AnyPointM((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, 60, 90, 4, m_ratio);    // right view, rotate -90
+    md->AnyPointM((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 4, m_ratio);      // Down view ( zoom: 2/4 )
+    md->AnyPointM((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, 70, 225, 4, m_ratio);   // left-lower view, rotate 180
+    md->AnyPointM((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, 70, 135, 4, m_ratio);   // right-lower view, rotate 180
+    md->PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 110);   // panorama
 }
 
     double time_clock = (double)(clock() - tStart)/CLOCKS_PER_SEC ;
@@ -95,8 +100,18 @@ cout << "time: " << time_clock << endl ;
      } 
      }
 
+    cvDestroyWindow("image_input");
+    cvDestroyWindow("Front");
+    cvDestroyWindow("Left");
+    cvDestroyWindow("Right");
+    cvDestroyWindow("Down");
+    cvDestroyWindow("Lower left");
+    cvDestroyWindow("Lower right");     
+    image_result.release();
+    image_resultv.release();
+
 }
-void MainWindow::DisplayCh(int ch)
+void Car6view::DisplayCh(int ch)
 {
 Mat image_result, image_resultv;
 if( image_input.empty()) return ;
@@ -108,6 +123,7 @@ if ( currCh != prevCh ) {
     cvDestroyWindow("Down");
     cvDestroyWindow("Lower left");
     cvDestroyWindow("Lower right");
+
 }
 
 // original image
@@ -233,13 +249,16 @@ if ( currCh != prevCh ) {
     imshow("Panorama", image_display[6]);
     moveWindow("Panorama", x_base, y_base);   
     break;    
+    case -1:
+    cout << "test" << endl;
+    break; 
     }
     prevCh = currCh ; 
 }
 
 
 
-void MainWindow::Rotate(Mat& src, Mat& dst, double angle)
+void Car6view::Rotate(Mat& src, Mat& dst, double angle)
 {
         Point2f center((src.cols-1)/2.0, (src.rows-1)/2.0);
         Mat rot = cv::getRotationMatrix2D(center, angle, 1.0);
@@ -249,7 +268,7 @@ void MainWindow::Rotate(Mat& src, Mat& dst, double angle)
         warpAffine(src, dst, rot, bbox.size());
 }
 
-void MainWindow::MatWrite(const string& filename, const Mat& mat)
+void Car6view::MatWrite(const string& filename, const Mat& mat)
 {
     ofstream fs(filename, fstream::binary);
 
@@ -276,7 +295,7 @@ void MainWindow::MatWrite(const string& filename, const Mat& mat)
     }
 }
 
-Mat MainWindow::MatRead(const string& filename)
+Mat Car6view::MatRead(const string& filename)
 {
     ifstream fs(filename, fstream::binary);
 
@@ -295,12 +314,12 @@ Mat MainWindow::MatRead(const string& filename)
 }
 
 
-void MainWindow::camButtonClicked()
+void Car6view::camButtonClicked()
 {
 
 }
 
-void MainWindow::openCamara()
+void Car6view::openCamara()
 {
     char c;
     cap0.open(0);
@@ -333,42 +352,42 @@ void MainWindow::openCamara()
         currAlpha = currAlpha + currInc ;
     else
         currAlpha = 90 ;   
-        md.fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
+        md->fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
           }
           else if (((int)c == 84) && (currCh == 2)) { // Down
     if ( currAlpha - currInc >= -90 )
         currAlpha = currAlpha - currInc ;
     else
         currAlpha = -90 ;          
-        md.fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
+        md->fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
           }
           else if (((int)c == 81) && (currCh == 2)) { // left
     if( currBeta - currInc >= 0 )
         currBeta = currBeta - currInc ;
     else
         currBeta = ( currBeta - currInc ) + 360 ;          
-        md.fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
+        md->fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
           }
           else if (((int)c == 83) && (currCh == 2)) { // right
     currBeta = ( currBeta + currInc ) % 360 ;
     if (currBeta < 0) currBeta += 360;          
-    md.fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
+    md->fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
           }
           else if (((int)c == 43) && (currCh == 2)) { // + 
     currZoom += 1;          
     if (currZoom > maxZoom) currZoom = maxZoom;              
-    md.fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
+    md->fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
           }          
           else if (((int)c == 45) && (currCh == 2)) { // - 
     currZoom -= 1;          
     if (currZoom < minZoom) currZoom = minZoom;              
-    md.fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
+    md->fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
           }   
           else if (((c == 'r')||(c == 'R')) && (currCh == 2)) { // R : Reset 
     currAlpha = 0 ; 
     currBeta = 0;      
     currZoom = defaultZoom;                        
-    md.fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
+    md->fastAnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio);       // front view      
           }             
 
     }
@@ -376,24 +395,36 @@ void MainWindow::openCamara()
     }
 }
 
-void MainWindow::readFarme()
+void Car6view::readFarme()
 {
 
 }
 
-void MainWindow::takingPictures()
-{
-
-}
-
-
-void MainWindow::closeCamara()
+void Car6view::takingPictures()
 {
 
 }
 
 
-MainWindow::~MainWindow()
+void Car6view::closeCamara()
 {
 
 }
+
+void Car6view::freeMemory()
+{
+    cout << "free memory" << endl;
+    image_input.release();
+    image_input_s.release();
+for(int i=0;i<7;i++) {
+    image_display[i].release();
+    mapX[i].release();
+    mapY[i].release();
+}
+}
+Car6view::~Car6view()
+{
+    freeMemory();
+    delete md;
+}
+
