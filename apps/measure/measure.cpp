@@ -17,7 +17,7 @@ void Measure::Show()
 
     fix_width = frame0.cols / 2;
     fix_height = fix_width * 3 / 4;
-    leftBlank = 68 * fix_width / 640;
+    leftBlank = 68;
 
     bool checked = false;
     bool checked2 = true;
@@ -103,9 +103,14 @@ void Measure::Show()
         {
             if (LPt_Ns == 2 && RPt_Ns == 2)
             {
-                Point rpa_0(rpa[0].x - fix_width, rpa[0].y);
-                Point rpa_1(rpa[1].x - fix_width, rpa[1].y);
-                Result = calcDistance(lpa[0], lpa[1], rpa_0, rpa_1);
+                double ratio = 640 / fix_width;
+                Point lpa_0(rpa[0].x * ratio, rpa[0].y * ratio);
+                Point lpa_1(rpa[1].x * ratio, rpa[1].y * ratio);
+
+                Point rpa_0((rpa[0].x - fix_width) * ratio, rpa[0].y * ratio);
+                Point rpa_1((rpa[1].x - fix_width) * ratio, rpa[1].y * ratio);
+
+                Result = calcDistance(lpa_0, lpa_1, rpa_0, rpa_1);
                 state = SystemState::CALCULATE;
             }
             else

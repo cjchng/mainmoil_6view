@@ -1,6 +1,6 @@
 #include "apps/car6view/car6view.h"
 #include "apps/measure/measure.h"
-
+#include "apps/stitch180/stitch180.h"
 char getch(void);
 int main(int argc, char *argv[])
 {
@@ -36,6 +36,12 @@ cout << c << endl;
             m->Show();  
             delete m ;                     
             break;
+        case '3':
+            Stitch180 *s;
+            s = new Stitch180() ; 
+            s->Show();  
+            delete s ;                     
+            break;            
         case 27:
             exit(1);
             break;
