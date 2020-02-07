@@ -103,13 +103,12 @@ void Measure::Show()
         {
             if (LPt_Ns == 2 && RPt_Ns == 2)
             {
-                double ratio = 640 / fix_width;
-                Point lpa_0(rpa[0].x * ratio, rpa[0].y * ratio);
-                Point lpa_1(rpa[1].x * ratio, rpa[1].y * ratio);
+                double ratio = (double)640 / fix_width;
+                Point lpa_0(lpa[0].x * ratio, lpa[0].y * ratio);
+                Point lpa_1(lpa[1].x * ratio, lpa[1].y * ratio);
 
                 Point rpa_0((rpa[0].x - fix_width) * ratio, rpa[0].y * ratio);
                 Point rpa_1((rpa[1].x - fix_width) * ratio, rpa[1].y * ratio);
-
                 Result = calcDistance(lpa_0, lpa_1, rpa_0, rpa_1);
                 state = SystemState::CALCULATE;
             }
