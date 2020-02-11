@@ -104,11 +104,12 @@ void Measure::Show()
             if (LPt_Ns == 2 && RPt_Ns == 2)
             {
                 double ratio = (double)640 / fix_width;
-                Point lpa_0(lpa[0].x * ratio, lpa[0].y * ratio);
-                Point lpa_1(lpa[1].x * ratio, lpa[1].y * ratio);
+                Point lpa_0(lpa[0].x * ratio, ( lpa[0].y - y_base ) * ratio);
+                Point lpa_1(lpa[1].x * ratio, ( lpa[1].y - y_base ) * ratio);
 
-                Point rpa_0((rpa[0].x - fix_width) * ratio, rpa[0].y * ratio);
-                Point rpa_1((rpa[1].x - fix_width) * ratio, rpa[1].y * ratio);
+                Point rpa_0((rpa[0].x - fix_width) * ratio, ( rpa[0].y - y_base ) * ratio);
+                Point rpa_1((rpa[1].x - fix_width) * ratio, ( rpa[1].y - y_base ) * ratio);
+
                 Result = calcDistance(lpa_0, lpa_1, rpa_0, rpa_1);
                 state = SystemState::CALCULATE;
             }
@@ -154,20 +155,21 @@ void Measure::Show()
         {
             // std::cout << "mouse down." << std::endl;
             cv::Point cursor = cvui::mouse();
-            std::cout << "x: " << cursor.x << " y: " << cursor.y << std::endl;
-            if (cursor.x <= fix_width && cursor.y > 200)
-            {
+            if (cursor.x <= fix_width && cursor.y >= y_base && cursor.y <= ( y_base + fix_height))
+            {                
                 if (LPt_Ns < 2)
                 {
+                    std::cout << "x: " << cursor.x << " y: " << cursor.y << std::endl;
                     lpa[LPt_Ns].x = cursor.x;
                     lpa[LPt_Ns].y = cursor.y;
                     LPt_Ns++;
                 }
             }
-            else if (cursor.x <= (fix_width * 2) && cursor.y > 200)
+            else if (cursor.x <= (fix_width * 2) && cursor.y > y_base && cursor.y <= ( y_base + fix_height))
             {
                 if (RPt_Ns < 2)
                 {
+                    std::cout << "x: " << cursor.x << " y: " << cursor.y << std::endl;
                     rpa[RPt_Ns].x = cursor.x;
                     rpa[RPt_Ns].y = cursor.y;
                     RPt_Ns++;
@@ -390,6 +392,12 @@ Point3d Measure::calc3DPoint(double alpha1, double beta1, double alpha2, double 
 
 double Measure::calcDistance(Point lp1, Point lp2, Point rp1, Point rp2)
 {
+    std::cout << "------ aligned to (640,480) ------- " << std::endl;
+    std::cout << "lp1: (" << lp1.x << "," << lp1.y << ")" << std::endl;
+    std::cout << "lp2: (" << lp2.x << "," << lp2.y << ")" << std::endl;
+    std::cout << "rp1: (" << rp1.x << "," << rp1.y << ")" << std::endl;
+    std::cout << "rp2: (" << rp2.x << "," << rp2.y << ")" << std::endl;
+
     double lalpha1 = getAlpha(lp1.x, lp1.y, CameraPos::LEFT);
     double lbeta1 = getBeta(lp1.x, lp1.y, CameraPos::LEFT);
     double lalpha2 = getAlpha(lp2.x, lp2.y, CameraPos::LEFT);
@@ -400,8 +408,16 @@ double Measure::calcDistance(Point lp1, Point lp2, Point rp1, Point rp2)
     double ralpha2 = getAlpha(rp2.x, rp2.y, CameraPos::RIGHT);
     double rbeta2 = getBeta(rp2.x, rp2.y, CameraPos::RIGHT);
 
+    std::cout << "lp1(alpha,beta) : (" << lalpha1 << "," << lbeta1 << ")" << std::endl;
+    std::cout << "lp2(alpha,beta) : (" << lalpha2 << "," << lbeta2 << ")" << std::endl;
+    std::cout << "rp1(alpha,beta) : (" << ralpha1 << "," << rbeta1 << ")" << std::endl;
+    std::cout << "rp2(alpha,beta) : (" << ralpha2 << "," << rbeta2 << ")" << std::endl;
+
     Point3d p1 = calc3DPoint(lalpha1, lbeta1, ralpha1, rbeta1);
     Point3d p2 = calc3DPoint(lalpha2, lbeta2, ralpha2, rbeta2);
+
+    std::cout << "p1(x,y,z) : (" << p1.x << "," << p1.y << "," << p1.z << ")" << std::endl;
+    std::cout << "p2(x,y,z) : (" << p2.x << "," << p2.y << "," << p2.z << ")" << std::endl;
 
     double dis = sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2) + pow(p1.z - p2.z, 2));
     return dis;
