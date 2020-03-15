@@ -4,6 +4,10 @@
 #define WINDOW_NAME "Stitch180"
 #define USE_IP_CAMERA true
 #define USE_PICAMERA true
+#define STITCH_CUT_DEGREE   10 
+#define STITCH_INTERVAL     1000
+#define STITCH_WIDTH        640
+#define STITCH_MAX_LENGTH          2000
 Stitch180::Stitch180()
 {
     md = new Moildev();
@@ -40,6 +44,12 @@ void Stitch180::Show()
     ConfigData *cd = md->getcd();
     // image_input = Mat(fix_height, fix_width, CV_32F);
     image_pano = Mat(fix_height, fix_width, CV_32F);
+    image_result = Mat(480, STITCH_WIDTH, CV_32F);
+    // image_result_s = Mat(100, STITCH_WIDTH, CV_32F);
+    image_result_s = Mat(100, 100, CV_32F);
+    image_result = cv::Scalar(0, 0, 0);
+    image_result_s = cv::Scalar(0, 0, 0);
+
     mapX_pano = Mat(fix_height, fix_width, CV_32F);
     mapY_pano = Mat(fix_height, fix_width, CV_32F);
 
@@ -89,9 +99,20 @@ else {
             cv::resize(image_input, image_input_s, Size(400, 300));                    
             remap(image_input, image_pano, mapX_pano, mapY_pano, INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
             cv::resize(image_pano, image_pano , Size(800,400));
+            // if(!image_result.empty())
+            //   cv::resize(image_result, image_result_s , Size( 600, image_result.rows * 600 / image_result.cols));
+            // cv::resize(image_input, image_result_s , Size(50, 50));
+            cout << image_result_s.cols << "," << image_result_s.rows << endl ;
             DisplayCh();
             }
         }
+
+if(!image_input.empty())
+        cv::resize(image_input, image_result_s , Size( 600, image_input.rows * 600 / image_input.cols));
+
+//if (!image_result_s.empty())
+//        image_result_s.copyTo(frame0(Rect(600, y_base, image_result_s.cols, image_result_s.rows)));
+  
 
         frame0.copyTo(frame);
         cvui::text(frame, 10, 20, "MOIL Stitch180");
@@ -112,28 +133,47 @@ else {
         }
         if (cvui::button(frame, posX + 110 * 2, 50, 100, 100, "Stitch"))
         {
-            state = SystemState::STITCH;
+            if (state == SystemState::CAMERA && stitchState == StitchState::OFF) {
+            stitchState = StitchState::ON;
+            tStart_overall = clock();
+            tStart = clock();
+            }
+            else
+            {
+                stitchState = StitchState::OFF;
+            }
+            
         }
         if (cvui::button(frame, posX + 110 * 3, 50, 100, 100, "Stop"))
         {
-            state = SystemState::NONE;
+            stitchState = StitchState::OFF;
         }
         if (cvui::button(frame, posX + 110 * 5, 50, 100, 100, "Exit"))
         {
             state = SystemState::EXIT;
         }
         if (state == SystemState::CAMERA)
+        {
             cvui::rect(frame, posX, 50, 100, 100, 0xff0000);
-        else if (state == SystemState::STITCH)
+        }
+        if (stitchState == StitchState::ON)
         {
             cvui::rect(frame, posX + 110 * 2, 50, 100, 100, 0xff0000);
             char buff[100];
-            if (Result > 0)
-            {
-                snprintf(buff, sizeof(buff), "%.2f", Result);
-                std::string distanceStr = buff;
-                cv::putText(frame, distanceStr, cv::Point(1000, 120), cv::FONT_HERSHEY_COMPLEX, 2, cv::Scalar(0, 255, 255), 2, 8, 0);
+            time_clock = (double)(clock() - tStart_overall)/ CLOCKS_PER_SEC ;
+            if( clock() - tStart >= STITCH_INTERVAL )
+            {       
+                doStitch(image_pano, image_result, 110, 85, 10);
+                if (image_result.cols > STITCH_MAX_LENGTH) {
+
+                }
+                tStart -= STITCH_INTERVAL;
             }
+    // cout << "time: " << time_clock << endl ; 
+                snprintf(buff, sizeof(buff), "%.2f", time_clock);
+                std::string distanceStr = buff;
+                cv::putText(frame, distanceStr, cv::Point(1000, 120), cv::FONT_HERSHEY_COMPLEX, 2, cv::Scalar(0, 255, 255), 2, 8, 0);            
+            
         }
         else if (state == SystemState::ERROR)
         {
@@ -152,6 +192,15 @@ else {
             break;
         }
     }
+}
+void Stitch180::doStitch(Mat &image_src, Mat &image_result, int alpha_all, int alpha_start, int alpha_width)
+{
+Mat image0 = image_src(Rect(0,image_src.rows*alpha_start/alpha_all,image_src.cols,image_src.rows*alpha_width/alpha_all));
+int h = image0.rows * image_result.cols / image0.cols ;
+cv::resize(image0, image0, Size(image_result.cols, h ), 0, 0, INTER_LINEAR);
+// image_result
+copyMakeBorder( image_result, image_result, image_src.rows, 0, 0, 0, BORDER_CONSTANT, Scalar( 0, 0, 0 ) );
+image0.copyTo(image_result( Rect(0, 0, image0.cols, image0.rows)));
 }
 
 void Stitch180::MatWrite(const string& filename, const Mat& mat)
@@ -210,6 +259,8 @@ void Stitch180::DisplayCh()
         }
         image_input_s.copyTo(frame0(Rect(200, y_base, image_input_s.cols, image_input_s.rows)));
         image_pano.copyTo(frame0(Rect(0, y_base+310, image_pano.cols, image_pano.rows)));
+      
+        
 
 }
 
