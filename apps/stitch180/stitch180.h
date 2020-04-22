@@ -34,7 +34,11 @@ private:
     Mat image_input, image_input_s, image_pano, image_result, image_result_s;
     Mat mapX_pano, mapY_pano;
     Mat frame0, frame;
+    Mat image0;
     double m_ratio;
+    int stitchCnt = 0;
+    int stitchCnt_Max = 50;
+    int stitchedLength = 0 ;
     int x_base = 0;
     int y_base = 180;
     int fix_width = 2592;
@@ -45,7 +49,7 @@ private:
     int stitch_elapsedTime = 0 ;
     clock_t tStart, tStart_overall;
     double time_clock ;
-    const std::string videoStreamAddress = "http://192.168.100.13:8000/stream.mjpg";
+    const std::string videoStreamAddress = "http://192.168.100.6:8000/stream.mjpg";
     enum class MediaType {NONE, IMAGE_FILE, CAMERA };
     MediaType mediaType = MediaType::NONE;
 
@@ -55,19 +59,23 @@ private:
     enum class StitchState { OFF, ON };
     StitchState stitchState = StitchState::OFF;
 
+    enum class RecordState { OFF, ON };
+    RecordState recordState = RecordState::OFF;
+
     enum class CameraPos { LEFT, RIGHT };
     SystemState cameraPos ; 
 
     void openCamara();
 
     VideoCapture cap0;
-
+    VideoWriter videoWriter;
     bool CaptureState = false;
     
-    void doStitch(Mat &image_src, Mat &image_result, int alpha_all, int alpha_start, int alpha_width);
+    int doStitch(Mat &image_src, Mat &image_result, int alpha_all, int alpha_start, int alpha_width, int stitch_offset);
     void MatWrite(const string& filename, const Mat& mat);
     Mat MatRead(const string& filename);
     void DisplayCh();
+    void saveImage(Mat img);
     void freeMemory();
 
 };

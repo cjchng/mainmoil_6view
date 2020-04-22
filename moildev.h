@@ -34,8 +34,10 @@ public:
     ConfigData *getcd();
 
     double AnyPointM(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double magnification);    
+    double AnyPointM2(float *mapX, float *mapY, int w, int h, double thetaX_degree, double thetaY_degree, double zoom, double magnification);
     double fastAnyPointM(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double magnification);
     double PanoramaM(float *mapX, float *mapY, int w, int h, double magnification, double alpha_max);
+    double PanoramaM_Rt(float *mapX, float *mapY, int w, int h, double magnification, double alpha_max, double iC_alpha_degree, double iC_beta_degree);
 
 private :
     double sinArray[90 * APPROX_FACT + 1]; 

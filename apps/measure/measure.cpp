@@ -2,7 +2,8 @@
 #define CVUI_IMPLEMENTATION
 #include "cvui.h"
 #define WINDOW_NAME "Measure"
-#define USE_PICAMERA true
+#define USE_IP_CAMERA true
+#define USE_PICAMERA false
 Measure::Measure()
 {
     md = new Moildev();
@@ -29,9 +30,11 @@ void Measure::Show()
     double Result;
     // repo220_T2
     md->Config("measure", 1.4, 1.4,
-               1320.0, 1017.0, 1.048,
-               2592, 1944, 4.05,
-               0, 0, 0, 0, -47.96, 222.86);
+               1298.0, 966.0, 1.048,
+               2592, 1944, 3.4, //4.05,
+               // 0, 0, 0, 0, -47.96, 222.86
+               0,0,0,10.11,-85.241,282.21
+               );  
     double calibrationWidth = md->getImageWidth();
     double iCy = md->getiCy();
     ConfigData *cd = md->getcd();
@@ -227,7 +230,10 @@ void Measure::DisplayCh(int ch) // 0: left, 1: right
 void Measure::openCamara()
 {
     char c;
-    cap0.open(0);
+    if ( USE_IP_CAMERA )
+        cap0.open(videoStreamAddress);
+    else    
+        cap0.open(0);
     cap0.set(CV_CAP_PROP_FRAME_WIDTH, 2592);
     cap0.set(CV_CAP_PROP_FRAME_HEIGHT, 1944);
 

@@ -41,6 +41,7 @@ private:
     int y_base = 200;
     int fix_width = 2592;
     int fix_height = 1944;
+    const std::string videoStreamAddress = "http://192.168.100.6:8000/stream.mjpg";    
     int currCh = 0, prevCh = 0;
     int leftBlank = 68 ; 
     const int leftBaseAlpha = 0, leftBaseBeta = 0 ;

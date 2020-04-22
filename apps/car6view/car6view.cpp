@@ -9,16 +9,24 @@ void Car6view::Show() {
 
 //cout << "test" << endl;
 //return ;
-
-    md->Config("car", 1.4, 1.4,
+    md->Config("rpi_220", 1.4, 1.4,
         1320.0, 1017.0, 1.048,
         2592, 1944, 4.05,
-        0, 0, 0, 0, -47.96, 222.86
+        // 0, 0, 0, 0, -47.96, 222.86
+        0,0,0,10.11,-85.241,282.21
         );
+/*        
+    md->Config("t265", 3, 3,
+        427, 394, 1,
+        848, 800, 1.68,
+        0, 0, -24.964, 38.2, -16.956, 183.42
+        );        
+*/        
     double calibrationWidth = md->getImageWidth();
 double iCy = md->getiCy();
 ConfigData *cd = md->getcd();
     image_input = imread( "images/image.jpg", IMREAD_COLOR);
+    // image_input = imread( "images/T265_01.jpg", IMREAD_COLOR);
     MediaType mediaType = MediaType::IMAGE_FILE;
     double w = image_input.cols;
     double h = image_input.rows;
@@ -91,7 +99,7 @@ cout << "time: " << time_clock << endl ;
     image_input.at<Vec3b>(0, 0) = p;
 
     DisplayCh(0);
- char c;
+ char c;int cnt;
  while(1){ 
      c = waitKey( 100 );
      if(c == 27) break;
@@ -328,12 +336,11 @@ void Car6view::openCamara()
 
     if ( cap0.isOpened() ) {   
         mediaType = MediaType::CAMERA;
-        currCh = 0;
+        currCh = 0; 
     for(;;)
     {
     // Mat frame;
     cap0 >> image_input;
-
     if (( image_input.cols != fix_width ) || ( image_input.rows != fix_height ))
     cv::resize(image_input, image_input, Size(fix_width, fix_height));
 
