@@ -1,5 +1,5 @@
 #include "car6view.h"
-#define MAP_CACHE_ENABLED true
+#define MAP_CACHE_ENABLED false
 #define USE_PICAMERA true
 Car6view::Car6view(){
     md = new Moildev();
