@@ -37,8 +37,12 @@ private:
     double m_ratio;
     int x_base = 80;
     int y_base = 30;
+// rpi_220    
     int fix_width = 2592;
     int fix_height = 1944;
+// T265
+//  int fix_width = 848;
+//  int fix_height = 800;
     int currCh = 0, prevCh = 0;
     int currPara = 0;
     int currAlpha = 0;

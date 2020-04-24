@@ -11,7 +11,7 @@ void Car6view::Show() {
 //return ;
     md->Config("rpi_220", 1.4, 1.4,
         1320.0, 1017.0, 1.048,
-        2592, 1944, 4.05,
+        2592, 1944, 3.4, // 4.05
         // 0, 0, 0, 0, -47.96, 222.86
         0,0,0,10.11,-85.241,282.21
         );
@@ -32,18 +32,18 @@ ConfigData *cd = md->getcd();
     double h = image_input.rows;
 
     mapX[0] = Mat(h, w, CV_32F);
-    mapX[1] = Mat(w, h, CV_32F);
-    mapX[2] = Mat(w, h, CV_32F);
+    mapX[1] = Mat(h, w, CV_32F);
+    mapX[2] = Mat(h, w, CV_32F);
     mapY[0] = Mat(h, w, CV_32F);
-    mapY[1] = Mat(w, h, CV_32F);
-    mapY[2] = Mat(w, h, CV_32F);
+    mapY[1] = Mat(h, w, CV_32F);
+    mapY[2] = Mat(h, w, CV_32F);
     for (uint i=3;i<7;i++)
          mapX[i] = Mat(h, w, CV_32F);
     for (uint i=3;i<7;i++)
          mapY[i] = Mat(h, w, CV_32F);
 
     Mat image_result(h, w, CV_32F);
-    Mat image_resultv(w, h, CV_32F);
+    Mat image_resultv(h, w, CV_32F);
     m_ratio = w / calibrationWidth;
     clock_t tStart = clock();
     char str_x[12], str_y[12];
@@ -66,12 +66,12 @@ for (i=0;i<7;i++) {
 }
 }
 else {
-    md->AnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, 0, 0, 4, m_ratio);       // front view
-    md->AnyPointM((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, 70, 270, 4, m_ratio);   // left view, rotate 90
-    md->AnyPointM((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, 70, 90, 4, m_ratio);    // right view, rotate -90
-    md->AnyPointM((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 4, m_ratio);      // Down view ( zoom: 2/4 )
-    md->AnyPointM((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, 70, 225, 4, m_ratio);   // left-lower view, rotate 180
-    md->AnyPointM((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, 70, 135, 4, m_ratio);   // right-lower view, rotate 180
+    md->AnyPointM2((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, 0, 0, 6, m_ratio);       // front view
+    md->AnyPointM2((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, 0, -70, 6, m_ratio);   // left view
+    md->AnyPointM2((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, 0, 70, 6, m_ratio);    // right view
+    md->AnyPointM2((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 6, m_ratio);      // Down view
+    md->AnyPointM2((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, -45, -45, 6, m_ratio);   // left-lower view
+    md->AnyPointM2((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, -45, 45, 6, m_ratio);   // right-lower view
     md->PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 110 );   // panorama
 for (i=0;i<7;i++) {
     sprintf(str_x, "matX%d", i);sprintf(str_y, "matY%d", i);
@@ -84,12 +84,12 @@ for (i=0;i<7;i++) {
 
 }
 else {
-    md->AnyPointM((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, 0, 0, 4, m_ratio);       // front view
-    md->AnyPointM((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, 70, 270, 4, m_ratio);   // left view, rotate 90
-    md->AnyPointM((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, 60, 90, 4, m_ratio);    // right view, rotate -90
-    md->AnyPointM((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 4, m_ratio);      // Down view ( zoom: 2/4 )
-    md->AnyPointM((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, 70, 225, 4, m_ratio);   // left-lower view, rotate 180
-    md->AnyPointM((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, 70, 135, 4, m_ratio);   // right-lower view, rotate 180
+    md->AnyPointM2((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, 0, 0, 6, m_ratio);       // front view
+    md->AnyPointM2((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, 0, -70, 6, m_ratio);   // left view
+    md->AnyPointM2((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, 0, 70, 6, m_ratio);    // right view
+    md->AnyPointM2((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, -70, 0, 6, m_ratio);      // Down view
+    md->AnyPointM2((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, -45, -45, 6, m_ratio);   // left-lower view
+    md->AnyPointM2((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, -45, 45, 6, m_ratio);   // right-lower view
     md->PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 110);   // panorama
 }
 
@@ -151,16 +151,14 @@ if ( currCh != prevCh ) {
     imshow("Front", image_display[0]);
     moveWindow("Front", x_base+width_split, 0+y_base);
 
-    remap(image_input, image_resultv, mapX[1], mapY[1], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
-    Rotate(image_resultv, image_result, 90.0);
+    remap(image_input, image_result, mapX[1], mapY[1], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
     cv::resize(image_result, image_display[1], Size(width_split,height_split-y_base));
     if(( mediaType == MediaType::CAMERA ) && USE_PICAMERA)
         cvtColor(image_display[1], image_display[1], CV_BGR2RGB);       
     imshow("Left", image_display[1]);
     moveWindow("Left", x_base, 0+y_base);
 
-    remap(image_input, image_resultv, mapX[2], mapY[2], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
-    Rotate(image_resultv, image_result, -90.0);
+    remap(image_input, image_result, mapX[2], mapY[2], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
     cv::resize(image_result, image_display[2], Size(width_split,height_split-y_base));
     if(( mediaType == MediaType::CAMERA ) && USE_PICAMERA)
         cvtColor(image_display[2], image_display[2], CV_BGR2RGB);       
@@ -175,15 +173,13 @@ if ( currCh != prevCh ) {
     moveWindow("Down", x_base+width_split, height_split+y_base);
 
     remap(image_input, image_result, mapX[4], mapY[4], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
-    Rotate(image_result, image_result, 180.0);
     cv::resize(image_result, image_display[4], Size(width_split,height_split-y_base));
     if(( mediaType == MediaType::CAMERA ) && USE_PICAMERA)
         cvtColor(image_display[4], image_display[4], CV_BGR2RGB);       
     imshow("Lower left", image_display[4]);
     moveWindow("Lower left", x_base, height_split+y_base);
 
-    remap(image_input, image_result, mapX[5], mapY[5], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
-    Rotate(image_result, image_result, 180.0);
+    remap(image_input, image_result, mapX[5], mapY[5], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));    
     cv::resize(image_result, image_display[5], Size(width_split,height_split-y_base));
     if(( mediaType == MediaType::CAMERA ) && USE_PICAMERA)
         cvtColor(image_display[5], image_display[5], CV_BGR2RGB);       
@@ -206,8 +202,7 @@ if ( currCh != prevCh ) {
     moveWindow("Front", x_base, y_base);    
     break;
     case 3:
-    remap(image_input, image_resultv, mapX[1], mapY[1], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
-    Rotate(image_resultv, image_result, 90.0);
+    remap(image_input, image_result, mapX[1], mapY[1], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
     cv::resize(image_result, image_display[1], Size(width_split*3,height_split*2));
     if(( mediaType == MediaType::CAMERA ) && USE_PICAMERA)
         cvtColor(image_display[1], image_display[1], CV_BGR2RGB);       
@@ -215,8 +210,7 @@ if ( currCh != prevCh ) {
     moveWindow("Left", x_base, y_base);    
     break;
     case 4:
-    remap(image_input, image_resultv, mapX[2], mapY[2], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
-    Rotate(image_resultv, image_result, -90.0);
+    remap(image_input, image_result, mapX[2], mapY[2], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));    
     cv::resize(image_result, image_display[2], Size(width_split*3,height_split*2));
     if(( mediaType == MediaType::CAMERA ) && USE_PICAMERA)
         cvtColor(image_display[2], image_display[2], CV_BGR2RGB);       
@@ -233,7 +227,6 @@ if ( currCh != prevCh ) {
     break;
     case 6:
     remap(image_input, image_result, mapX[4], mapY[4], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
-    Rotate(image_result, image_result, 180.0);
     cv::resize(image_result, image_display[4], Size(width_split*3,height_split*2));
     if(( mediaType == MediaType::CAMERA ) && USE_PICAMERA)
         cvtColor(image_display[4], image_display[4], CV_BGR2RGB);       
@@ -241,8 +234,7 @@ if ( currCh != prevCh ) {
     moveWindow("Lower left", x_base, y_base);    
     break;
     case 7:
-    remap(image_input, image_result, mapX[5], mapY[5], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
-    Rotate(image_result, image_result, 180.0);
+    remap(image_input, image_result, mapX[5], mapY[5], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));    
     cv::resize(image_result, image_display[5], Size(width_split*3,height_split*2));
     if(( mediaType == MediaType::CAMERA ) && USE_PICAMERA)
         cvtColor(image_display[5], image_display[5], CV_BGR2RGB);       
