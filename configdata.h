@@ -2,7 +2,9 @@
 #define CONFIGDATA_H
 #include <string>
 #include <iostream>
+#include <math.h>
 
+#define PI 3.1415926
 using namespace std;
 
 class ConfigData
@@ -17,15 +19,16 @@ public:
     double ratio;
     double imageWidth;
     double imageHeight;
-    double parameter0;
-    double parameter1;
-    double parameter2;
-    double parameter3;
-    double parameter4;
-    double parameter5;
+    double para0;
+    double para1;
+    double para2;
+    double para3;
+    double para4;
+    double para5;
     double calibrationRatio;
     string cameraName;
-
+    int alphaToRho_Table[1800];  // degree /10
+    int rhoToAlpha_Table[3600];  // pixel
     ConfigData();
     void setCameraSensorWidth(double cameraSensorWidth);
     void setCameraSensorHeight(double cameraSensorHieght);
@@ -62,7 +65,9 @@ public:
     double getParameter5();
     double getCalibrationRatio();
     string getCameraName();
-
+    void initAlphaRho_Table();
+    int getRhoFromAlpha( double alpha );
+    double getAlphaFromRho( int rho );
 };
 
 #endif // CONFIGDATA_H

@@ -24,13 +24,11 @@ void Car6view::Show() {
 */        
     double calibrationWidth = md->getImageWidth();
 double iCy = md->getiCy();
-ConfigData *cd = md->getcd();
-    image_input = imread( "images/image.jpg", IMREAD_COLOR);
+    image_input = imread( "images/image.jpg", IMREAD_COLOR);      
     // image_input = imread( "images/T265_01.jpg", IMREAD_COLOR);
     MediaType mediaType = MediaType::IMAGE_FILE;
     double w = image_input.cols;
     double h = image_input.rows;
-
     mapX[0] = Mat(h, w, CV_32F);
     mapX[1] = Mat(h, w, CV_32F);
     mapX[2] = Mat(h, w, CV_32F);
@@ -47,7 +45,7 @@ ConfigData *cd = md->getcd();
     m_ratio = w / calibrationWidth;
     clock_t tStart = clock();
     char str_x[12], str_y[12];
-    int i = 0;
+    int i = 0; 
 if ( MAP_CACHE_ENABLED ) {
 
 bool map_exist = true ;
@@ -97,7 +95,6 @@ else {
 cout << "time: " << time_clock << endl ; 
     Vec3b p(0,0,0) ;
     image_input.at<Vec3b>(0, 0) = p;
-
     DisplayCh(0);
  char c;int cnt;
  while(1){ 

@@ -37,7 +37,6 @@ void Measure::Show()
                );  
     double calibrationWidth = md->getImageWidth();
     double iCy = md->getiCy();
-    ConfigData *cd = md->getcd();
     // image_input = imread( "images/left.jpg", IMREAD_COLOR);
     frame0 = cv::Scalar(49, 52, 49);
     image_input = imread("images/left.jpg");

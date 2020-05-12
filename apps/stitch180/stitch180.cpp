@@ -42,7 +42,6 @@ void Stitch180::Show()
                );               
     double calibrationWidth = md->getImageWidth();
     double iCy = md->getiCy();
-    ConfigData *cd = md->getcd();
     // image_input = Mat(fix_height, fix_width, CV_32F);
     image_pano = Mat(fix_height, fix_width, CV_32F);
     image_result = Mat(700, STITCH_WIDTH, CV_8UC3);

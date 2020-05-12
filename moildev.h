@@ -5,6 +5,7 @@
 #include <string.h>
 #include <iostream>
 #include <math.h>
+#include <vector>
 #include "configdata.h"
 
 
@@ -30,6 +31,7 @@ public:
         );
     double getImageHeight();
     double getImageWidth();
+    double getiCx();
     double getiCy();
     ConfigData *getcd();
 
@@ -38,7 +40,10 @@ public:
     double fastAnyPointM(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double magnification);
     double PanoramaM(float *mapX, float *mapY, int w, int h, double magnification, double alpha_max);
     double PanoramaM_Rt(float *mapX, float *mapY, int w, int h, double magnification, double alpha_max, double iC_alpha_degree, double iC_beta_degree);
-
+    int getRhoFromAlpha( double alpha );
+    double getAlphaFromRho( int rho );
+    vector<int> getAlphaBetaFromPos(int Mode, vector<int> Pos);
+    
 private :
     double sinArray[90 * APPROX_FACT + 1]; 
     void initSin();
