@@ -27,8 +27,8 @@ public:
     double para5;
     double calibrationRatio;
     string cameraName;
-    int alphaToRho_Table[1800];  // degree /10
-    int rhoToAlpha_Table[3600];  // pixel
+    int alphaToRho_Table[1800]; // degree /10
+    int rhoToAlpha_Table[3600]; // pixel
     ConfigData();
     void setCameraSensorWidth(double cameraSensorWidth);
     void setCameraSensorHeight(double cameraSensorHieght);
@@ -66,8 +66,8 @@ public:
     double getCalibrationRatio();
     string getCameraName();
     void initAlphaRho_Table();
-    int getRhoFromAlpha( double alpha );
-    double getAlphaFromRho( int rho );
+    int getRhoFromAlpha(double alpha);
+    double getAlphaFromRho(int rho);
 };
 
 #endif // CONFIGDATA_H

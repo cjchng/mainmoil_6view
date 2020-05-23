@@ -33,8 +33,7 @@ void Measure::Show()
                1298.0, 966.0, 1.048,
                2592, 1944, 3.4, //4.05,
                // 0, 0, 0, 0, -47.96, 222.86
-               0,0,0,10.11,-85.241,282.21
-               );  
+               0, 0, 0, 10.11, -85.241, 282.21);
     double calibrationWidth = md->getImageWidth();
     double iCy = md->getiCy();
     // image_input = imread( "images/left.jpg", IMREAD_COLOR);
@@ -106,11 +105,11 @@ void Measure::Show()
             if (LPt_Ns == 2 && RPt_Ns == 2)
             {
                 double ratio = (double)640 / fix_width;
-                Point lpa_0(lpa[0].x * ratio, ( lpa[0].y - y_base ) * ratio);
-                Point lpa_1(lpa[1].x * ratio, ( lpa[1].y - y_base ) * ratio);
+                Point lpa_0(lpa[0].x * ratio, (lpa[0].y - y_base) * ratio);
+                Point lpa_1(lpa[1].x * ratio, (lpa[1].y - y_base) * ratio);
 
-                Point rpa_0((rpa[0].x - fix_width) * ratio, ( rpa[0].y - y_base ) * ratio);
-                Point rpa_1((rpa[1].x - fix_width) * ratio, ( rpa[1].y - y_base ) * ratio);
+                Point rpa_0((rpa[0].x - fix_width) * ratio, (rpa[0].y - y_base) * ratio);
+                Point rpa_1((rpa[1].x - fix_width) * ratio, (rpa[1].y - y_base) * ratio);
 
                 Result = calcDistance(lpa_0, lpa_1, rpa_0, rpa_1);
                 state = SystemState::CALCULATE;
@@ -157,8 +156,8 @@ void Measure::Show()
         {
             // std::cout << "mouse down." << std::endl;
             cv::Point cursor = cvui::mouse();
-            if (cursor.x <= fix_width && cursor.y >= y_base && cursor.y <= ( y_base + fix_height))
-            {                
+            if (cursor.x <= fix_width && cursor.y >= y_base && cursor.y <= (y_base + fix_height))
+            {
                 if (LPt_Ns < 2)
                 {
                     std::cout << "x: " << cursor.x << " y: " << cursor.y << std::endl;
@@ -167,7 +166,7 @@ void Measure::Show()
                     LPt_Ns++;
                 }
             }
-            else if (cursor.x <= (fix_width * 2) && cursor.y > y_base && cursor.y <= ( y_base + fix_height))
+            else if (cursor.x <= (fix_width * 2) && cursor.y > y_base && cursor.y <= (y_base + fix_height))
             {
                 if (RPt_Ns < 2)
                 {
@@ -229,9 +228,9 @@ void Measure::DisplayCh(int ch) // 0: left, 1: right
 void Measure::openCamara()
 {
     char c;
-    if ( USE_IP_CAMERA )
+    if (USE_IP_CAMERA)
         cap0.open(videoStreamAddress);
-    else    
+    else
         cap0.open(0);
     cap0.set(CV_CAP_PROP_FRAME_WIDTH, 2592);
     cap0.set(CV_CAP_PROP_FRAME_HEIGHT, 1944);

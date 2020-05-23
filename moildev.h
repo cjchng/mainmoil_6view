@@ -8,7 +8,6 @@
 #include <vector>
 #include "configdata.h"
 
-
 #define PI 3.1415926
 #define PI_2 1.5707963
 #define PCT_UNIT_WIDTH 1.27
@@ -18,34 +17,34 @@
 
 using namespace std;
 
-class  Moildev
+class Moildev
 {
 public:
-    class ConfigData* cfg;
+    class ConfigData *cfg;
     Moildev();
-    bool fastMode = false ; 
+    bool fastMode = false;
     bool Config(string cameraName, double cameraSensorWidth, double cameraSensorHeight,
-        double iCx, double iCy, double i_ratio,
-        double imageWidth, double imageHeight, double calibrationRatio,
-        double para0, double para1, double para2, double para3, double para4, double para5
-        );
+                double iCx, double iCy, double i_ratio,
+                double imageWidth, double imageHeight, double calibrationRatio,
+                double para0, double para1, double para2, double para3, double para4, double para5);
     double getImageHeight();
     double getImageWidth();
     double getiCx();
     double getiCy();
     ConfigData *getcd();
 
-    double AnyPointM(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double magnification);    
+    double AnyPointM(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double magnification);
     double AnyPointM2(float *mapX, float *mapY, int w, int h, double thetaX_degree, double thetaY_degree, double zoom, double magnification);
     double fastAnyPointM(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double magnification);
+    double fastAnyPointM2(float *mapX, float *mapY, int w, int h, double thetaX_degree, double thetaY_degree, double zoom, double magnification);
     double PanoramaM(float *mapX, float *mapY, int w, int h, double magnification, double alpha_max);
     double PanoramaM_Rt(float *mapX, float *mapY, int w, int h, double magnification, double alpha_max, double iC_alpha_degree, double iC_beta_degree);
-    int getRhoFromAlpha( double alpha );
-    double getAlphaFromRho( int rho );
+    int getRhoFromAlpha(double alpha);
+    double getAlphaFromRho(int rho);
     vector<int> getAlphaBetaFromPos(int Mode, vector<int> Pos);
-    
-private :
-    double sinArray[90 * APPROX_FACT + 1]; 
+
+private:
+    double sinArray[90 * APPROX_FACT + 1];
     void initSin();
     double ApproxSin(double angle);
     double ApproxCos(double angle);

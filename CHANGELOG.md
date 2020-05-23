@@ -1,3 +1,8 @@
+## [1.0.3](https://github.com/cjchng/mainmoil_6view/releases/tag/v1.0.3) (05 23, 2020)
+  
+Bugfixes/Improvements
+  - fastAnypointM2()
+  - fix bugs for camera()
 
 ## [1.0.2](https://github.com/cjchng/mainmoil_6view/releases/tag/v1.0.2) (05 11, 2020)
   

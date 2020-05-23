@@ -8,18 +8,19 @@
 #include <time.h>
 #include <iostream>
 #include <fstream>
-#include <termios.h>  
-#include <unistd.h> 
+#include <termios.h>
+#include <unistd.h>
 
 #include "../../moildev.h"
 using namespace std;
 using namespace cv;
 
-namespace Ui {
-class Measure;
+namespace Ui
+{
+    class Measure;
 }
 
-class Measure 
+class Measure
 {
 
 public:
@@ -27,10 +28,8 @@ public:
     void Show();
     ~Measure();
 
-
 private:
-
-    Moildev *md ;
+    Moildev *md;
     Mat image_input;
     Mat frame0, frame;
 
@@ -41,26 +40,44 @@ private:
     int y_base = 200;
     int fix_width = 2592;
     int fix_height = 1944;
-    const std::string videoStreamAddress = "http://192.168.100.6:8000/stream.mjpg";    
+    const std::string videoStreamAddress = "http://192.168.100.6:8000/stream.mjpg";
     int currCh = 0, prevCh = 0;
-    int leftBlank = 68 ; 
-    const int leftBaseAlpha = 0, leftBaseBeta = 0 ;
-    const int rightBaseAlpha = 0, rightBaseBeta = 0 ;
-//Socinext
-//    int cameraLeftCx = 334, cameraLeftCy = 198;
-//    int cameraRightCx = 310, cameraRightCy = 244;
-//Raspberry
+    int leftBlank = 68;
+    const int leftBaseAlpha = 0, leftBaseBeta = 0;
+    const int rightBaseAlpha = 0, rightBaseBeta = 0;
+    //Socinext
+    //    int cameraLeftCx = 334, cameraLeftCy = 198;
+    //    int cameraRightCx = 310, cameraRightCy = 244;
+    //Raspberry
     int cameraLeftCx = 319, cameraLeftCy = 241;
     int cameraRightCx = 319, cameraRightCy = 241;
 
-    enum class MediaType {NONE, IMAGE_FILE, CAMERA };
+    enum class MediaType
+    {
+        NONE,
+        IMAGE_FILE,
+        CAMERA
+    };
     MediaType mediaType = MediaType::NONE;
 
-    enum class SystemState { NONE, CAMERA_LEFT, CAMERA_RIGHT, SET_POINT, CALCULATE, EXIT, ERROR };
+    enum class SystemState
+    {
+        NONE,
+        CAMERA_LEFT,
+        CAMERA_RIGHT,
+        SET_POINT,
+        CALCULATE,
+        EXIT,
+        ERROR
+    };
     SystemState state = SystemState::NONE;
 
-    enum class CameraPos { LEFT, RIGHT };
-    SystemState cameraPos ; 
+    enum class CameraPos
+    {
+        LEFT,
+        RIGHT
+    };
+    SystemState cameraPos;
 
     void openCamara();
 
@@ -76,4 +93,4 @@ private:
     double calcDistance(Point lp1, Point lp2, Point rp1, Point rp2);
 };
 
-#endif 
+#endif
