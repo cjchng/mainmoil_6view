@@ -8,8 +8,10 @@ A sample project for moil system 6 views display, tested both on ubuntu 18.04 an
 
 For RaspberryPi, please download Raspbian opetating system image :
 https://www.raspberrypi.org/downloads/raspbian/
+
 following the installing steps : 
 https://www.raspberrypi.org/documentation/installation/installing-images/
+
 or tutorial :
 https://oranwind.org/-raspberry-pi-win32-disk-imager-shao-lu-sd-qia-jiao-xue/
 
