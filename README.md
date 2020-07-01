@@ -28,22 +28,21 @@ If you already have Opencv installed, the followings can be skipped. Opencv can 
 	sudo apt install libatlas-base-dev gfortran
 	sudo apt install libopencv-dev python-opencv
 
-## 2. Build
+## 2. For Raspberry Pi only
 
-	for Raspberry Pi, please replace libmoildev.a with libmoilde_rpi.a 
+	Please replace libmoildev.a with libmoilde_rpi.a 
 	cd lib
 	cp libmoildev_rpi.a libmoildev.a 
+
+## 3. Build and Run
 
 	mkdir build
 	cd build
 	cmake ..
 	make
-
-## 3. Run
-
 	./mainmoil
 
-Key operations:
+## 4. Key operations:
 
 	c : start camera
 	0 : 6 channels view
@@ -56,7 +55,7 @@ Key operations:
 	r : reset alpha, beta, zoom   
 	esc : exit
 
-## 4. Options 
+## 5. Options 
 
 1. Disk Cache
 
