@@ -216,10 +216,10 @@ void Stitch180::Show()
         {
             if (recordState == RecordState::OFF)
             {
-                recordState = RecordState::ON;
-
-                // videoWriter.open("capture.avi", CV_FOURCC('M','J','P','G'),10, Size(frame_width, frame_height));
-                videoWriter.open("capture.mp4", CV_FOURCC('D', 'I', 'V', '3'), 10, Size(fix_width, fix_height));
+                recordState = RecordState::ON;                
+                // videoWriter.open("capture.mp4", CV_FOURCC('D', 'I', 'V', '3'), 10, Size(fix_width, fix_height));
+                videoWriter.open("capture.mp4", VideoWriter::fourcc ('D', 'I', 'V', '3'), 10, Size(fix_width, fix_height));
+                // videoWriter.open("capture.mp4", CAP_ANY, 10, Size(fix_width, fix_height));
             }
             else
             {
@@ -304,8 +304,8 @@ void Stitch180::DisplayCh()
 
     if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
     {
-        cvtColor(image_input_s, image_input_s, CV_BGR2RGB);
-        cvtColor(image_pano, image_pano, CV_BGR2RGB);
+        cvtColor(image_input_s, image_input_s, COLOR_BGR2RGB);
+        cvtColor(image_pano, image_pano, COLOR_BGR2RGB);
     }
     image_input_s.copyTo(frame0(Rect(200, y_base, image_input_s.cols, image_input_s.rows)));
     image_pano.copyTo(frame0(Rect(0, y_base + 310, image_pano.cols, image_pano.rows)));
@@ -319,8 +319,8 @@ void Stitch180::openCamara()
     else
         cap0.open(0);
 
-    cap0.set(CV_CAP_PROP_FRAME_WIDTH, 2592);
-    cap0.set(CV_CAP_PROP_FRAME_HEIGHT, 1944);
+    cap0.set(CAP_PROP_FRAME_WIDTH, 2592);
+    cap0.set(CAP_PROP_FRAME_HEIGHT, 1944);
 
     if (cap0.isOpened())
     {

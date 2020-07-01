@@ -8,14 +8,12 @@ A sample project for moil system 6 views display, tested both on ubuntu 18.04 an
 
 For RaspberryPi, please download Raspbian opetating system image :
 https://www.raspberrypi.org/downloads/raspbian/
-
 following the installing steps : 
 https://www.raspberrypi.org/documentation/installation/installing-images/
-
 or tutorial :
 https://oranwind.org/-raspberry-pi-win32-disk-imager-shao-lu-sd-qia-jiao-xue/
 
-If you already have Opencv installed, the followings can be skipped. Opencv can be any version, 3.2.0 is recommented.  
+If you already have Opencv installed, the followings can be skipped. Opencv can be version 3.x.x or version 4.x.x.  
 
 	sudo apt update
 	sudo apt upgrade
@@ -32,12 +30,18 @@ If you already have Opencv installed, the followings can be skipped. Opencv can 
 
 ## 2. Build
 
-./build
+	for Raspberry Pi, please replace libmoildev.a with libmoilde_rpi.a 
+	cd lib
+	cp libmoildev_rpi.a libmoildev.a 
+
+	mkdir build
+	cd build
+	cmake ..
+	make
 
 ## 3. Run
 
-to run mainmoil,  
-./mainmoil
+	./mainmoil
 
 Key operations:
 

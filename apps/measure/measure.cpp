@@ -38,11 +38,11 @@ void Measure::Show()
     double iCy = md->getiCy();
     // image_input = imread( "images/left.jpg", IMREAD_COLOR);
     frame0 = cv::Scalar(49, 52, 49);
-    image_input = imread("images/left.jpg");
+    image_input = imread("../images/left.jpg");
     cv::resize(image_input, image_input, Size(fix_width, fix_height), 0, 0, INTER_LINEAR);
     image_input.copyTo(frame0(Rect(0, y_base, image_input.cols, image_input.rows)));
 
-    image_input = imread("images/right.jpg");
+    image_input = imread("../images/right.jpg");
     cv::resize(image_input, image_input, Size(fix_width, fix_height), 0, 0, INTER_LINEAR);
     image_input.copyTo(frame0(Rect(image_input.cols, y_base, image_input.cols, image_input.rows)));
 
@@ -213,12 +213,12 @@ void Measure::DisplayCh(int ch) // 0: left, 1: right
     {
     case 0:
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_input, image_input, CV_BGR2RGB);
+            cvtColor(image_input, image_input, COLOR_BGR2RGB);
         image_input.copyTo(frame0(Rect(0, y_base, image_input.cols, image_input.rows)));
         break;
     case 1:
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_input, image_input, CV_BGR2RGB);
+            cvtColor(image_input, image_input, COLOR_BGR2RGB);
         image_input.copyTo(frame0(Rect(image_input.cols, y_base, image_input.cols, image_input.rows)));
         break;
     }
@@ -232,8 +232,8 @@ void Measure::openCamara()
         cap0.open(videoStreamAddress);
     else
         cap0.open(0);
-    cap0.set(CV_CAP_PROP_FRAME_WIDTH, 2592);
-    cap0.set(CV_CAP_PROP_FRAME_HEIGHT, 1944);
+    cap0.set(CAP_PROP_FRAME_WIDTH, 2592);
+    cap0.set(CAP_PROP_FRAME_HEIGHT, 1944);
 
     if (cap0.isOpened())
     {

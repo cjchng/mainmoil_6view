@@ -5,4 +5,5 @@ mainmoil
 mat*
 mainmoil
 stitchResult.jpg
-capture*.mp4
+*.mp4
+build/

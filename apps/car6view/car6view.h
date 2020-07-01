@@ -11,7 +11,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-#include "../../moildev.h"
+#include "moildev.h"
 using namespace std;
 using namespace cv;
 

@@ -26,7 +26,7 @@ void Car6view::Show()
 */
     double calibrationWidth = md->getImageWidth();
     double iCy = md->getiCy();
-    image_input = imread("images/image.jpg", IMREAD_COLOR);
+    image_input = imread("../images/image.jpg", IMREAD_COLOR);
     // image_input = imread( "images/T265_01.jpg", IMREAD_COLOR);
     MediaType mediaType = MediaType::IMAGE_FILE;
     double w = image_input.cols;
@@ -118,13 +118,13 @@ void Car6view::Show()
         }
     }
 
-    cvDestroyWindow("image_input");
-    cvDestroyWindow("Front");
-    cvDestroyWindow("Left");
-    cvDestroyWindow("Right");
-    cvDestroyWindow("Down");
-    cvDestroyWindow("Lower left");
-    cvDestroyWindow("Lower right");
+    destroyWindow("image_input");
+    destroyWindow("Front");
+    destroyWindow("Left");
+    destroyWindow("Right");
+    destroyWindow("Down");
+    destroyWindow("Lower left");
+    destroyWindow("Lower right");
     image_result.release();
     image_resultv.release();
 }
@@ -135,13 +135,13 @@ void Car6view::DisplayCh(int ch)
         return;
     if (currCh != prevCh)
     {
-        cvDestroyWindow("image_input");
-        cvDestroyWindow("Front");
-        cvDestroyWindow("Left");
-        cvDestroyWindow("Right");
-        cvDestroyWindow("Down");
-        cvDestroyWindow("Lower left");
-        cvDestroyWindow("Lower right");
+        destroyWindow("image_input");
+        destroyWindow("Front");
+        destroyWindow("Left");
+        destroyWindow("Right");
+        destroyWindow("Down");
+        destroyWindow("Lower left");
+        destroyWindow("Lower right");
     }
 
     // original image
@@ -151,56 +151,56 @@ void Car6view::DisplayCh(int ch)
 
         cv::resize(image_input, image_input_s, Size(width_split, height_split - y_base));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_input_s, image_input_s, CV_BGR2RGB);
+            cvtColor(image_input_s, image_input_s, COLOR_BGR2RGB);
         imshow("image_input", image_input_s);
         moveWindow("image_input", x_base + width_split, 0 + y_base);
 
         remap(image_input, image_result, mapX[0], mapY[0], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[0], Size(width_split, height_split - y_base));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[0], image_display[0], CV_BGR2RGB);
+            cvtColor(image_display[0], image_display[0], COLOR_BGR2RGB);
         imshow("Front", image_display[0]);
         moveWindow("Front", x_base + width_split, 0 + y_base);
 
         remap(image_input, image_result, mapX[1], mapY[1], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[1], Size(width_split, height_split - y_base));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[1], image_display[1], CV_BGR2RGB);
+            cvtColor(image_display[1], image_display[1], COLOR_BGR2RGB);
         imshow("Left", image_display[1]);
         moveWindow("Left", x_base, 0 + y_base);
 
         remap(image_input, image_result, mapX[2], mapY[2], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[2], Size(width_split, height_split - y_base));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[2], image_display[2], CV_BGR2RGB);
+            cvtColor(image_display[2], image_display[2], COLOR_BGR2RGB);
         imshow("Right", image_display[2]);
         moveWindow("Right", x_base + width_split * 2, 0 + y_base);
 
         remap(image_input, image_result, mapX[3], mapY[3], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[3], Size(width_split, height_split - y_base));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[3], image_display[3], CV_BGR2RGB);
+            cvtColor(image_display[3], image_display[3], COLOR_BGR2RGB);
         imshow("Down", image_display[3]);
         moveWindow("Down", x_base + width_split, height_split + y_base);
 
         remap(image_input, image_result, mapX[4], mapY[4], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[4], Size(width_split, height_split - y_base));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[4], image_display[4], CV_BGR2RGB);
+            cvtColor(image_display[4], image_display[4], COLOR_BGR2RGB);
         imshow("Lower left", image_display[4]);
         moveWindow("Lower left", x_base, height_split + y_base);
 
         remap(image_input, image_result, mapX[5], mapY[5], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[5], Size(width_split, height_split - y_base));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[5], image_display[5], CV_BGR2RGB);
+            cvtColor(image_display[5], image_display[5], COLOR_BGR2RGB);
         imshow("Lower right", image_display[5]);
         moveWindow("Lower right", x_base + width_split * 2, height_split + y_base);
         break;
     case 1:
         cv::resize(image_input, image_input_s, Size(width_split * 3, height_split * 2));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_input_s, image_input_s, CV_BGR2RGB);
+            cvtColor(image_input_s, image_input_s, COLOR_BGR2RGB);
         imshow("image_input", image_input_s);
         moveWindow("image_input", x_base, y_base);
         break;
@@ -208,7 +208,7 @@ void Car6view::DisplayCh(int ch)
         remap(image_input, image_result, mapX[0], mapY[0], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[0], Size(width_split * 3, height_split * 2));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[0], image_display[0], CV_BGR2RGB);
+            cvtColor(image_display[0], image_display[0], COLOR_BGR2RGB);
         imshow("Front", image_display[0]);
         moveWindow("Front", x_base, y_base);
         break;
@@ -216,7 +216,7 @@ void Car6view::DisplayCh(int ch)
         remap(image_input, image_result, mapX[1], mapY[1], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[1], Size(width_split * 3, height_split * 2));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[1], image_display[1], CV_BGR2RGB);
+            cvtColor(image_display[1], image_display[1], COLOR_BGR2RGB);
         imshow("Left", image_display[1]);
         moveWindow("Left", x_base, y_base);
         break;
@@ -224,7 +224,7 @@ void Car6view::DisplayCh(int ch)
         remap(image_input, image_result, mapX[2], mapY[2], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[2], Size(width_split * 3, height_split * 2));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[2], image_display[2], CV_BGR2RGB);
+            cvtColor(image_display[2], image_display[2], COLOR_BGR2RGB);
         imshow("Right", image_display[2]);
         moveWindow("Right", x_base, y_base);
         break;
@@ -232,7 +232,7 @@ void Car6view::DisplayCh(int ch)
         remap(image_input, image_result, mapX[3], mapY[3], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[3], Size(width_split * 3, height_split * 2));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[3], image_display[3], CV_BGR2RGB);
+            cvtColor(image_display[3], image_display[3], COLOR_BGR2RGB);
         imshow("Down", image_display[3]);
         moveWindow("Down", x_base, y_base);
         break;
@@ -240,7 +240,7 @@ void Car6view::DisplayCh(int ch)
         remap(image_input, image_result, mapX[4], mapY[4], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[4], Size(width_split * 3, height_split * 2));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[4], image_display[4], CV_BGR2RGB);
+            cvtColor(image_display[4], image_display[4], COLOR_BGR2RGB);
         imshow("Lower left", image_display[4]);
         moveWindow("Lower left", x_base, y_base);
         break;
@@ -248,7 +248,7 @@ void Car6view::DisplayCh(int ch)
         remap(image_input, image_result, mapX[5], mapY[5], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[5], Size(width_split * 3, height_split * 2));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[5], image_display[5], CV_BGR2RGB);
+            cvtColor(image_display[5], image_display[5], COLOR_BGR2RGB);
         imshow("Lower right", image_display[5]);
         moveWindow("Lower right", x_base, y_base);
         break;
@@ -256,7 +256,7 @@ void Car6view::DisplayCh(int ch)
         remap(image_input, image_result, mapX[6], mapY[6], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[6], Size(width_split * 3, height_split * 2));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
-            cvtColor(image_display[6], image_display[6], CV_BGR2RGB);
+            cvtColor(image_display[6], image_display[6], COLOR_BGR2RGB);
         imshow("Panorama", image_display[6]);
         moveWindow("Panorama", x_base, y_base);
         break;
@@ -330,8 +330,8 @@ void Car6view::openCamara()
 {
     char c;
     cap0.open(0);
-    cap0.set(CV_CAP_PROP_FRAME_WIDTH, 2592);
-    cap0.set(CV_CAP_PROP_FRAME_HEIGHT, 1944);
+    cap0.set(CAP_PROP_FRAME_WIDTH, 2592);
+    cap0.set(CAP_PROP_FRAME_HEIGHT, 1944);
 
     if (cap0.isOpened())
     {

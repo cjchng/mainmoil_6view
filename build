@@ -1,9 +1,0 @@
-#!/bin/bash
-g++ -c apps/car6view/car6view.cpp
-g++ -c apps/measure/measure.cpp
-g++ -c apps/stitch180/stitch180.cpp
-if [[ "$OSTYPE" == "linux-gnueabihf" ]]; then
-g++ -o mainmoil main.cpp car6view.o measure.o stitch180.o moildev_rpi.a `pkg-config --cflags opencv` `pkg-config --libs opencv` 
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-g++ -o mainmoil main.cpp car6view.o measure.o stitch180.o moildev.a `pkg-config --cflags opencv` `pkg-config --libs opencv` 
-fi
