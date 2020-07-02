@@ -28,11 +28,16 @@ If you already have Opencv installed, the followings can be skipped. Opencv can 
 	sudo apt install libatlas-base-dev gfortran
 	sudo apt install libopencv-dev python-opencv
 
-## 2. For Raspberry Pi only
+## 2. For Raspberry Pi/ NVIDIA Jetson TX2
 
-	Please replace libmoildev.a with libmoilde_rpi.a 
+	For Raspberry Pi, please replace libmoildev.a with libmoilde_rpi.a 
 	cd lib
 	cp libmoildev_rpi.a libmoildev.a 
+
+	For NVIDIA Jetson TX2, please replace libmoildev.a with libmoilde_jetson.a 
+	cd lib
+	cp libmoildev_jetson.a libmoildev.a 
+
 
 ## 3. Build and Run
 
