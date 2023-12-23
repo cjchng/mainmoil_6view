@@ -1,6 +1,7 @@
 #include "apps/car6view/car6view.h"
 #include "apps/measure/measure.h"
 #include "apps/stitch180/stitch180.h"
+#include "apps/fullmap/fullmap.h"
 char getch(void);
 int main(int argc, char *argv[])
 {
@@ -14,7 +15,8 @@ int main(int argc, char *argv[])
     cout << endl << "      MainMoil Menu   " << endl;
     cout << endl << "      1. Car - 6 channel views  " << endl;
     cout << endl << "      2. Measure " << endl;
-    cout << endl << "      3. Stitch 180    " << endl << endl;      
+    cout << endl << "      3. Stitch 180    " << endl;      
+    cout << endl << "      4. FullMap    " << endl << endl;        
     cout << endl << "      Esc to Exit    " << endl;    
     cout << endl << "----------------------------" << endl;
 
@@ -41,7 +43,13 @@ cout << c << endl;
             s = new Stitch180() ; 
             s->Show();  
             delete s ;                     
-            break;            
+            break;   
+        case '4':
+            FullMap *f;
+            f = new FullMap() ; 
+            f->Show();  
+            delete w ;          
+            break;                     
         case 27:
             exit(1);
             break;

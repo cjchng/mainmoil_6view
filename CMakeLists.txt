@@ -5,7 +5,7 @@ project(MoilExample)
 find_package(OpenCV REQUIRED)
 include_directories( include )
 link_directories(${CMAKE_SOURCE_DIR}/lib)
-set(APPS apps/car6view/car6view.cpp apps/measure/measure.cpp apps/stitch180/stitch180.cpp )
+set(APPS apps/car6view/car6view.cpp apps/measure/measure.cpp apps/stitch180/stitch180.cpp apps/fullmap/fullmap.cpp)
 set(DEPENDENCIES libmoildev.a ${OpenCV_LIBS})
 
 add_executable(mainmoil main.cpp ${APPS})

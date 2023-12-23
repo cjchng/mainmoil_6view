@@ -37,6 +37,8 @@ public:
     double AnyPointM2(float *mapX, float *mapY, int w, int h, double thetaX_degree, double thetaY_degree, double zoom, double magnification);
     double fastAnyPointM(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double magnification);
     double fastAnyPointM2(float *mapX, float *mapY, int w, int h, double thetaX_degree, double thetaY_degree, double zoom, double magnification);
+    double fmap(float *fmapX, float *fmapY, int w, int h, int ResMultiplier, double magnification, double alpha_max);
+    double AnyPointM_fmap(float *mapX, float *mapY, int w, int h, float *fmapX, float *fmapY, double alphaOffset, double betaOffset, double zoom, double ResMultiplier, double magnification, double alpha_max);
     double PanoramaM(float *mapX, float *mapY, int w, int h, double magnification, double alpha_max);
     double PanoramaM_Rt(float *mapX, float *mapY, int w, int h, double magnification, double alpha_max, double iC_alpha_degree, double iC_beta_degree);
     int getRhoFromAlpha(double alpha);
