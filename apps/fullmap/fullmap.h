@@ -31,6 +31,8 @@ public:
 private:
     Moildev *md;
     Mat image_input, image_input_s;
+    Mat image_result;
+    Mat image_resultv;
     Mat image_display[7];
     Mat fmapX, fmapY;
     Mat mapX[7], mapY[7];
@@ -71,6 +73,10 @@ private:
 
     void openCamara();
     void doAnyPoint();
+    void doAnyPoint_NF();    
+    void View_NF();
+    double AnyPointM_NF(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double alpha_max );    
+    double AnyPointM2_NF(float *mapX, float *mapY, int w, int h, double thetaX_degree, double thetaY_degree, double zoom, double alpha_max );    
     void readFarme();
     void closeCamara();
     void takingPictures();

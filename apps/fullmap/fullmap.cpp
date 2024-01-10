@@ -12,7 +12,7 @@ void FullMap::Show()
 
     //cout << "test" << endl;
     //return ;
-    md->Config("rpi_220", 1.4, 1.4,
+    md->Config("rpi_220", 1.4, 1.4, 
                1320.0, 1017.0, 1.048,
                2592, 1944, 3.4, // 4.05
                // 0, 0, 0, 0, -47.96, 222.86
@@ -44,16 +44,50 @@ void FullMap::Show()
     for (uint i = 3; i < 7; i++)
         mapY[i] = Mat(h, w, CV_32F);
 
-    Mat image_result(h, w, CV_32F);
-    Mat image_resultv(h, w, CV_32F);
+    image_result = Mat(h, w, CV_32F);
+    image_resultv = Mat(h, w, CV_32F);
     m_ratio = w / calibrationWidth;
     clock_t tStart = clock();
     char str_x[20], str_y[20];
     int i = 0;
+    char c;
 
-    sprintf(str_x, "fmatX");
-    sprintf(str_y, "fmatY");
 
+
+    // Generate a Normalized map of Fisheye image 
+    md->NormFisheyeMap((float *)mapX[0].data, (float *)mapY[0].data, 2592, 1944, m_ratio, 120);    
+    remap(image_input, image_result, mapX[0], mapY[0], INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0));
+    cv::imwrite("NormFisheye.jpg",image_result);
+    cv::resize(image_result, image_display[0], Size(1512, 1080));
+    // cv::resize(image_result, image_display[0], Size(2592, 1944));
+    imshow("NormFisheye", image_display[0]);
+    moveWindow("NormFisheye", 0, 0 ); 
+    while (1) 
+    {
+        c = waitKey(100); 
+        if (c == 27)
+            break; 
+
+    }   
+
+    // Test Anypoint for Normalized Fisheye image, Mode 1 and Mode 2
+    AnyPointM2_NF((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, 0, 70, 6, alpha_max );
+    remap(image_result, image_resultv, mapX[0], mapY[0], INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0));
+    cv::resize(image_resultv, image_display[0], Size(1512, 1080));
+    imshow("AnyPoint_NF", image_display[0]);
+    moveWindow("AnyPoint_NF", 0, 0 ); 
+
+    while (1) 
+    {
+        c = waitKey(100); 
+        if (c == 27)
+            break; 
+
+    }  
+
+
+    sprintf(str_x, "ABmatX");
+    sprintf(str_y, "ABmatY");
     if (MAP_CACHE_ENABLED)
     {
 
@@ -66,7 +100,7 @@ void FullMap::Show()
             fmapY = MatRead(str_y);            
         }
         else {
-            md->fmap((float *)fmapX.data, (float *)fmapY.data, w, h, ResMultiplier, m_ratio, alpha_max);           
+            md->ABmap((float *)fmapX.data, (float *)fmapY.data, w, h, ResMultiplier, m_ratio, alpha_max);           
             MatWrite(str_x, fmapX);
             MatWrite(str_y, fmapY);            
         }
@@ -74,28 +108,30 @@ void FullMap::Show()
     }
     else
     {
-            md->fmap((float *)fmapX.data, (float *)fmapY.data, w, h, ResMultiplier, m_ratio, alpha_max);           
+            md->ABmap((float *)fmapX.data, (float *)fmapY.data, w, h, ResMultiplier, m_ratio, alpha_max);           
             MatWrite(str_x, fmapX);
             MatWrite(str_y, fmapY);    
-    }
+    } 
+ 
+        md->AnyPointM_ABmap((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, (float *)fmapX.data, (float *)fmapY.data, 0, 0, 6, 10, m_ratio, 110);     // front view
+        md->AnyPointM_ABmap((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, (float *)fmapX.data, (float *)fmapY.data, 0, -70, 6, 10, m_ratio, 110);   // left view
+        md->AnyPointM_ABmap((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, (float *)fmapX.data, (float *)fmapY.data, 0, 70, 6, 10, m_ratio, 110);    // right view
+        md->AnyPointM_ABmap((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, (float *)fmapX.data, (float *)fmapY.data, -20, 0, 6, 10, m_ratio, 110);   // Down view
+        md->AnyPointM_ABmap((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, (float *)fmapX.data, (float *)fmapY.data, 50, -45, 6, 10, m_ratio, 110); // left-lower view
+        md->AnyPointM_ABmap((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, (float *)fmapX.data, (float *)fmapY.data, 70, 45, 6, 10, m_ratio, 110);  // right-lower view
 
-        md->AnyPointM_fmap((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, (float *)fmapX.data, (float *)fmapY.data, 0, 0, 6, 10, m_ratio, 110);     // front view
-        md->AnyPointM_fmap((float *)mapX[1].data, (float *)mapY[1].data, mapX[1].cols, mapX[1].rows, (float *)fmapX.data, (float *)fmapY.data, 0, -70, 6, 10, m_ratio, 110);   // left view
-        md->AnyPointM_fmap((float *)mapX[2].data, (float *)mapY[2].data, mapX[2].cols, mapX[2].rows, (float *)fmapX.data, (float *)fmapY.data, 0, 70, 6, 10, m_ratio, 110);    // right view
-        md->AnyPointM_fmap((float *)mapX[3].data, (float *)mapY[3].data, mapX[3].cols, mapX[3].rows, (float *)fmapX.data, (float *)fmapY.data, 20, 0, 6, 10, m_ratio, 110);   // Down view
-        md->AnyPointM_fmap((float *)mapX[4].data, (float *)mapY[4].data, mapX[4].cols, mapX[4].rows, (float *)fmapX.data, (float *)fmapY.data, 50, -45, 6, 10, m_ratio, 110); // left-lower view
-        md->AnyPointM_fmap((float *)mapX[5].data, (float *)mapY[5].data, mapX[5].cols, mapX[5].rows, (float *)fmapX.data, (float *)fmapY.data, 70, 45, 6, 10, m_ratio, 110);  // right-lower view
-            for (i = 0; i < 1; i++)
+        for (i = 0; i < 1; i++)
             {
                 sprintf(str_x, "matX%d", i); 
                 sprintf(str_y, "matY%d", i);
                 MatWrite(str_x, mapX[i]);
                 MatWrite(str_y, mapY[i]);
             }        
-        // md->PanoramaM((float *)mapX[6].data, (float *)mapY[6].data, mapX[6].cols, mapX[6].rows, m_ratio, 110);          // panorama
-    sprintf(str_x, "fmatX= %f", *( ((float *)fmapX.data)+2000000) );
+// debug
+/*        
+    sprintf(str_x, "fmatX= %f", *( ((float *)fmapX.data)+1000000) );
     cout << "vx: " << str_x << endl;
-    sprintf(str_x, "fmatY= %f", *( ((float *)fmapY.data)+2000000) );
+    sprintf(str_x, "fmatY= %f", *( ((float *)fmapY.data)+1000000) );
     cout << "vy: " << str_x << endl;
 
 double max = -1,min = 10000;
@@ -115,14 +151,14 @@ for ( int i=0; i<3960000;i++) {
     cout << "fmin: " << str_x << endl;
 
 
-max = -1; min = 10000;
+max = -1; min = 10000; 
 for ( int i=0; i<5000000;i++) {
-    if( *(((float *)mapX[0].data)+i) != 0 ) {
-        if ( *(((float *)mapX[0].data)+i) > max ) {
-            max = *(((float *)mapX[0].data)+i);
+    if( *(((float *)mapY[0].data)+i) != 0 ) {
+        if ( *(((float *)mapY[0].data)+i) > max ) {
+            max = *(((float *)mapY[0].data)+i);
         }
-    if ( *(((float *)mapX[0].data)+i) < min ) {
-            min = *(((float *)mapX[0].data)+i);
+    if ( *(((float *)mapY[0].data)+i) < min ) {
+            min = *(((float *)mapY[0].data)+i);
     } 
         }
 }
@@ -130,18 +166,19 @@ for ( int i=0; i<5000000;i++) {
     cout << "max: " << str_x << endl;
     sprintf(str_x, "%f", min);
     cout << "min: " << str_x << endl;
-
+*/
     double time_clock = (double)(clock() - tStart) / CLOCKS_PER_SEC;
     cout << "time: " << time_clock << endl;
     Vec3b p(0, 0, 0);
     image_input.at<Vec3b>(0, 0) = p; 
-    char c;
+
 
     cv::resize(fmapX, image_display[0], Size(2592, 1944));
     cv::resize(fmapY, image_display[1], Size(2592, 1944));
     remap(image_input, image_result, image_display[0], image_display[1], INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0));
+    cv::imwrite("ABmap.jpg",image_result);
     cv::resize(image_result, image_display[0], Size(1920, 1080));
-
+ 
     imshow("fmap", image_display[0]);
     while (1)
     {
@@ -152,20 +189,26 @@ for ( int i=0; i<5000000;i++) {
     }
 
 
+
     DisplayCh(0);
 
     int cnt;
     while (1)
     {
         c = waitKey(100);
-        if (c == 27)
-            break;
+
         if (c == 'c')
         {
             openCamara();
         }
+        else if (c == 27)
+            break;        
     }
 
+
+
+
+    destroyWindow("fmap");
     destroyWindow("image_input");
     destroyWindow("Front");
     destroyWindow("Left");
@@ -459,6 +502,196 @@ void FullMap::doAnyPoint()
         md->fastAnyPointM2((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio); // front view
     else
         md->AnyPointM2((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, m_ratio); // front view
+}
+
+void FullMap::doAnyPoint_NF()
+{        
+        AnyPointM_NF((float *)mapX[0].data, (float *)mapY[0].data, mapX[0].cols, mapX[0].rows, currAlpha, currBeta, currZoom, alpha_max );
+}
+
+void FullMap::View_NF()
+{
+    char c;
+
+    md->NormFisheyeMap((float *)mapX[0].data, (float *)mapY[0].data, 2592, 1944, m_ratio, 120);    
+    remap(image_input, image_result, mapX[0], mapY[0], INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0));
+    cv::resize(image_result, image_display[0], Size(1512, 1080));
+    // cv::resize(image_result, image_display[0], Size(2592, 1944));
+    imshow("NormFisheye", image_display[0]);
+    moveWindow("NormFisheye", 0, 0 ); 
+
+        currCh = 0;
+        for (;;)
+        {
+
+
+
+            c = waitKey(33);
+
+            if (c == 27)
+                break; // stop capturing by pressing ESC
+            else if ((c >= '0') && (c <= '8'))
+            {
+                currCh = (int)c - int('0');
+            }
+            else if (((int)c == 82) && (currCh == 2)) // up
+            {
+                currAlpha = currAlpha + currInc;
+                currAlpha = (currAlpha > 90) ? 90 : currAlpha;
+                doAnyPoint_NF();
+            }
+            else if (((int)c == 84) && (currCh == 2)) // Down
+            {
+                currAlpha = currAlpha - currInc;
+                currAlpha = (currAlpha < -90) ? -90 : currAlpha;
+                doAnyPoint_NF();
+            }
+            else if (((int)c == 81) && (currCh == 2)) // left
+            {
+                currBeta = currBeta - currInc;
+                currBeta = (currBeta < -90) ? -90 : currBeta;
+                doAnyPoint_NF();
+            }
+            else if (((int)c == 83) && (currCh == 2)) // right
+            {
+                currBeta = currBeta + currInc;
+                currBeta = (currBeta > 90) ? 90 : currBeta;
+                doAnyPoint_NF();
+            }
+            else if (((int)c == 43) && (currCh == 2)) // +
+            {
+                currZoom += 1;
+                if (currZoom > maxZoom)
+                    currZoom = maxZoom;
+                doAnyPoint_NF();
+            }
+            else if (((int)c == 45) && (currCh == 2)) // -
+            {
+                currZoom -= 1;
+                if (currZoom < minZoom)
+                    currZoom = minZoom;
+                doAnyPoint_NF();
+            }
+            else if (((c == 'r') || (c == 'R')) && (currCh == 2))
+            { // R : Reset
+                currAlpha = 0;
+                currBeta = 0;
+                currZoom = defaultZoom;
+                doAnyPoint_NF();
+            }
+        }
+        mediaType = MediaType::NONE;
+    
+}
+
+
+
+double FullMap::AnyPointM_NF(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double alpha_max )
+{
+    double icx = w / 2;
+    double icy = h / 2;
+    double k = (double)h / 2.0 / ( alpha_max * PI / 180 );
+    betaOffset += 180;
+    double mAlphaOffset = alphaOffset * (PI / 180);
+    double mBetaOffset = betaOffset * (PI / 180);
+    double senH, senV, tempX, tempY, tempZ, beta, alpha;
+
+    double origPostionX, origPostionY;
+    double widthCosB = PCT_UNIT_WIDTH * cos(mBetaOffset);
+    double heightCosASinB = PCT_UNIT_HEIGHT * cos(mAlphaOffset) * sin(mBetaOffset);
+    double flZoomSinASinB = FOCAL_LENGTH_FOR_ZOOM * zoom * sin(mAlphaOffset) * sin(mBetaOffset);
+    double widthSinB = PCT_UNIT_WIDTH * sin(mBetaOffset);
+    double heightCosACosB = PCT_UNIT_HEIGHT * cos(mAlphaOffset) * cos(mBetaOffset);
+    double flZoomSinACosB = FOCAL_LENGTH_FOR_ZOOM * zoom * sin(mAlphaOffset) * cos(mBetaOffset);
+    double heightSinA = PCT_UNIT_HEIGHT * sin(mAlphaOffset);
+    double flZoomCosA = FOCAL_LENGTH_FOR_ZOOM * zoom * cos(mAlphaOffset);
+    for (int positionY = 0; positionY < h; positionY++)
+    {
+        for (int positionX = 0; positionX < w; positionX++)
+        {
+            tempX = (positionX - icx) * widthCosB - (positionY - icy) * heightCosASinB + flZoomSinASinB;
+            tempY = (positionX - icx) * widthSinB + (positionY - icy) * heightCosACosB - flZoomSinACosB;
+            tempZ = (positionY - icy) * heightSinA + flZoomCosA;
+            alpha = atan2(sqrt(tempX * tempX + tempY * tempY), tempZ);
+            beta = atan2(tempY, tempX);
+            double alpha_cal =  alpha * k ; 
+            senH = icx - alpha_cal * cos(beta);
+            senV = icy - alpha_cal * sin(beta);
+                
+            origPostionX = round(senH);
+            origPostionY = round(senV);
+            if (origPostionX >= 0 && origPostionX < w && origPostionY >= 0 && origPostionY < h)
+                {
+                    *(mapX + (positionY * w + positionX)) = (float)origPostionX;
+                    *(mapY + (positionY * w + positionX)) = (float)origPostionY;
+                }
+            else
+                {
+                    *(mapX + (positionY * w + positionX)) = 0;
+                    *(mapY + (positionY * w + positionX)) = 0;
+                }
+            
+        }
+    }
+
+    return 0;
+}
+
+double FullMap::AnyPointM2_NF(float *mapX, float *mapY, int w, int h, double thetaX_degree, double thetaY_degree, double zoom, double alpha_max )
+{
+    double icx = w / 2;
+    double icy = h / 2;
+    double k = (double)h / 2.0 / ( alpha_max * PI / 180 );
+
+    double thetaX = thetaX_degree * (PI / 180);
+    double thetaY = thetaY_degree * (PI / 180);
+
+    double senH, senV, tempX, tempY, tempZ, beta, alpha;
+
+    double origPostionX, origPostionY;
+
+    double widthCosB = PCT_UNIT_WIDTH * cos(thetaY);
+    double heightSinASinB = PCT_UNIT_HEIGHT * sin(thetaX) * sin(thetaY);
+    double flZoomCosASinB = FOCAL_LENGTH_FOR_ZOOM * zoom * cos(thetaX) * sin(thetaY);
+    double heightCosA = PCT_UNIT_HEIGHT * cos(thetaX);
+    double flZoomSinA = FOCAL_LENGTH_FOR_ZOOM * zoom * sin(thetaX);
+    double widthSinB = PCT_UNIT_WIDTH * sin(thetaY);
+    double heightSinACosB = PCT_UNIT_HEIGHT * sin(thetaX) * cos(thetaY);
+    double flZoomCosACosB = FOCAL_LENGTH_FOR_ZOOM * zoom * cos(thetaX) * cos(thetaY);
+    for (int positionY = 0; positionY < h; positionY++)
+    {
+        for (int positionX = 0; positionX < w; positionX++)
+        {
+            tempX = (positionX - icx) * widthCosB + (positionY - icy) * heightSinASinB + flZoomCosASinB;
+            tempY = (positionY - icy) * heightCosA - flZoomSinA;
+            tempZ = -(positionX - icx) * widthSinB + (positionY - icy) * heightSinACosB + flZoomCosACosB;
+
+            tempX = -tempX;
+            tempY = -tempY;
+            alpha = atan2(sqrt(tempX * tempX + tempY * tempY), tempZ);
+            
+            beta = atan2(tempY, tempX);                
+            double alpha_cal =  alpha * k ; 
+            senH = icx - alpha_cal * cos(beta);
+            senV = icy - alpha_cal * sin(beta);
+
+            origPostionX = round(senH);
+            origPostionY = round(senV);
+            if (origPostionX >= 0 && origPostionX < w && origPostionY >= 0 && origPostionY < h)
+                {
+                    *(mapX + (positionY * w + positionX)) = (float)origPostionX;
+                    *(mapY + (positionY * w + positionX)) = (float)origPostionY;
+                }
+            else
+                {
+                    *(mapX + (positionY * w + positionX)) = 0;
+                    *(mapY + (positionY * w + positionX)) = 0;
+                }
+            
+        }
+    }
+
+    return 0;
 }
 
 void FullMap::readFarme()
