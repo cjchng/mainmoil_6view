@@ -12,11 +12,21 @@ void FullMap::Show()
 
     //cout << "test" << endl;
     //return ;
+    md->Config("rpi_220_skc", 1.4, 1.4, 
+               1300.0, 960.0, 1.0,
+               2592, 1944, 3.33, 
+               // 0, 0, 0, 0, -47.96, 222.86
+               0, 0, 0, 10.11, -85.241, 282.21);
+// from original fisheye image, set center at (1300,960), radius= 996
+// for a = 110xPI/180, we have cal_ratio = 996/ (10.11xa^3-85.241xa^2+282.21xa)=3.33  
+
+    /*
     md->Config("rpi_220", 1.4, 1.4, 
                1320.0, 1017.0, 1.048,
                2592, 1944, 3.4, // 4.05
                // 0, 0, 0, 0, -47.96, 222.86
                0, 0, 0, 10.11, -85.241, 282.21);
+    */               
     /*        
     md->Config("t265", 3, 3,
         427, 394, 1,
@@ -55,7 +65,7 @@ void FullMap::Show()
 
 
     // Generate a Normalized map of Fisheye image 
-    md->NormFisheyeMap((float *)mapX[0].data, (float *)mapY[0].data, 2592, 1944, m_ratio, 120);    
+    md->NormFisheyeMap((float *)mapX[0].data, (float *)mapY[0].data, 2592, 1944, m_ratio, 110);    
     remap(image_input, image_result, mapX[0], mapY[0], INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0));
     cv::imwrite("NormFisheye.jpg",image_result);
     cv::resize(image_result, image_display[0], Size(1512, 1080));
