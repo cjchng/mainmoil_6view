@@ -62,7 +62,7 @@ void FullMap::Show()
     int i = 0;
     char c;
 
-
+/*-- 1. NormFisheyeMap -----------------------------------------*/
 
     // Generate a Normalized map of Fisheye image 
     md->NormFisheyeMap((float *)mapX[0].data, (float *)mapY[0].data, 2592, 1944, m_ratio, 110);    
@@ -75,8 +75,9 @@ void FullMap::Show()
     while (1) 
     {
         c = waitKey(100); 
-        if (c == 27)
+        if ((c != -1) && ( c !=0 )) {
             break; 
+        }
 
     }   
 
@@ -90,11 +91,13 @@ void FullMap::Show()
     while (1) 
     {
         c = waitKey(100); 
-        if (c == 27)
+        if ((c != -1) && ( c !=0 )) {
             break; 
+        }
 
     }  
 
+/*-- 2. ABMap ----------------------------------------------*/
 
     sprintf(str_x, "ABmatX");
     sprintf(str_y, "ABmatY");
@@ -189,36 +192,53 @@ for ( int i=0; i<5000000;i++) {
     cv::imwrite("ABmap.jpg",image_result);
     cv::resize(image_result, image_display[0], Size(1920, 1080));
  
-    imshow("fmap", image_display[0]);
+    imshow("ABmap", image_display[0]);
+    moveWindow("ABmap", 0, 0 ); 
     while (1)
     {
         c = waitKey(100); 
-        if (c == 27)
+        if ((c != -1) && ( c !=0 )) {
             break; 
+        }
 
     }
 
+/*-- 3. Equimat ----------------------------------------------*/
 
+    sprintf(str_x, "EquimatX"); 
+    sprintf(str_y, "EquimatY");
 
-    DisplayCh(0);
+    fmapX.create(h, w, CV_32F);
+    fmapY.create(h, w, CV_32F);
 
-    int cnt;
+    md->PanoramaM_Rt((float *)fmapX.data, (float *)fmapY.data, w, h, m_ratio, 180, 90, 0);
+
+    MatWrite(str_x, fmapX);
+    MatWrite(str_y, fmapY);
+
+    // cv::resize(fmapX, image_display[0], Size(2592, 1944));
+    // cv::resize(fmapY, image_display[1], Size(2592, 1944));
+    remap(image_input, image_result, fmapX, fmapY, INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0));
+    cv::imwrite("Equirectangular.jpg",image_result);
+    cv::resize(image_result, image_display[0], Size(1920, 1080));
+ 
+    imshow("Equirectangular", image_display[0]);
+    moveWindow("Equirectangular", 0, 0 );    
     while (1)
     {
-        c = waitKey(100);
-
-        if (c == 'c')
-        {
-            openCamara();
+        c = waitKey(100); 
+        if ((c != -1) && ( c !=0 )) {
+            break; 
         }
-        else if (c == 27)
-            break;        
+
     }
 
 
 
-
-    destroyWindow("fmap");
+    destroyWindow("NormFisheye");
+    destroyWindow("ABmap");
+    destroyWindow("Equirectangular");
+/*
     destroyWindow("image_input");
     destroyWindow("Front");
     destroyWindow("Left");
@@ -226,6 +246,7 @@ for ( int i=0; i<5000000;i++) {
     destroyWindow("Down");
     destroyWindow("Lower left");
     destroyWindow("Lower right");
+*/
     image_result.release();
     image_resultv.release();
 }

@@ -39,7 +39,7 @@ public:
     double fastAnyPointM2(float *mapX, float *mapY, int w, int h, double thetaX_degree, double thetaY_degree, double zoom, double magnification);
     double ABmap(float *fmapX, float *fmapY, int w, int h, int ResMultiplier, double magnification, double alpha_max);
     double AnyPointM_ABmap(float *mapX, float *mapY, int w, int h, float *ABmapX, float *ABmapY, double alphaOffset, double betaOffset, double zoom, double ResMultiplier, double magnification, double alpha_max);
-    double AnyPointM2_ABmap(float *mapX, float *mapY, int w, int h, float *ABmapX, float *ABmapY, double thetaX_degree, double thetaY_degree, double zoom, double ResMultiplier, double magnification, double alpha_max);        
+    double AnyPointM2_ABmap(float *mapX, float *mapY, int w, int h, float *ABmapX, float *ABmapY, double thetaX_degree, double thetaY_degree, double zoom, double ResMultiplier, double magnification, double alpha_max);    
     double NormFisheyeMap(float *mapX, float *mapY, int w, int h, double magnification, double alpha_max);    
     double AnyPointM_NF(float *mapX, float *mapY, int w, int h, double alphaOffset, double betaOffset, double zoom, double alpha_max );
     double AnyPointM2_NF(float *mapX, float *mapY, int w, int h, double thetaX_degree, double thetaY_degree, double zoom, double alpha_max );    
