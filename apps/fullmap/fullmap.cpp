@@ -8,15 +8,20 @@ FullMap::FullMap()
 }
 void FullMap::Show()
 {
-    // repo220_T2
 
-    //cout << "test" << endl;
-    //return ;
+	md->Config("endoscope", 2, 2,
+			1120.0, 520.0, 1,
+			1920, 1080, 3,
+			0, 0, 0, 0, 0, 130
+				  );
+
+/*
     md->Config("rpi_220_skc", 1.4, 1.4, 
                1300.0, 960.0, 1.0,
                2592, 1944, 3.33, 
                // 0, 0, 0, 0, -47.96, 222.86
                0, 0, 0, 10.11, -85.241, 282.21);
+*/
 // from original fisheye image, set center at (1300,960), radius= 996
 // for a = 110xPI/180, we have cal_ratio = 996/ (10.11xa^3-85.241xa^2+282.21xa)=3.33  
 
@@ -36,7 +41,8 @@ void FullMap::Show()
 */
     double calibrationWidth = md->getImageWidth();
     double iCy = md->getiCy();
-    image_input = imread("../images/image.jpg", IMREAD_COLOR);
+    image_input = imread("../images/endo01.jpg", IMREAD_COLOR);
+    // image_input = imread("../images/image.jpg", IMREAD_COLOR);    
     // image_input = imread( "images/T265_01.jpg", IMREAD_COLOR);
     MediaType mediaType = MediaType::IMAGE_FILE;
     double w = image_input.cols;
@@ -65,7 +71,7 @@ void FullMap::Show()
 /*-- 1. NormFisheyeMap -----------------------------------------*/
 
     // Generate a Normalized map of Fisheye image 
-    md->NormFisheyeMap((float *)mapX[0].data, (float *)mapY[0].data, 2592, 1944, m_ratio, 110);    
+    md->NormFisheyeMap((float *)mapX[0].data, (float *)mapY[0].data, w, h, m_ratio, 110);    
     remap(image_input, image_result, mapX[0], mapY[0], INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0));
     cv::imwrite("NormFisheye.jpg",image_result);
     cv::resize(image_result, image_display[0], Size(1512, 1080));
@@ -205,6 +211,9 @@ for ( int i=0; i<5000000;i++) {
 
 /*-- 3. Equimat ----------------------------------------------*/
 
+int target_w = 1920;
+int target_h = 1080;
+
     sprintf(str_x, "EquimatX"); 
     sprintf(str_y, "EquimatY");
 
@@ -213,17 +222,26 @@ for ( int i=0; i<5000000;i++) {
 
     md->PanoramaM_Rt((float *)fmapX.data, (float *)fmapY.data, w, h, m_ratio, 180, 90, 0);
 
+    remap(image_input, image_result, fmapX, fmapY, INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0));
+if (( target_w != w ) || (target_h != h)) {
+    cv::resize(image_result, image_result, Size(target_w, target_h));
+}     
+    cv::imwrite("Equirectangular.jpg", image_result);
+    // always 1920x1080 for display 
+    cv::resize(image_result, image_display[0], Size(1920, 1080));
+    imshow("Equirectangular", image_display[0]);
+    moveWindow("Equirectangular", 0, 0 );   
+
+/* Original resolution: 2592x1944, We may need smaller X,Y maps for renesas EVK */
+    // cv::resize(fmapX, image_display[0], Size(2592, 1944));
+    // cv::resize(fmapY, image_display[1], Size(2592, 1944));
+
+    cv::resize(fmapX, fmapX, Size(1920, 1080));
+    cv::resize(fmapY, fmapY, Size(1920, 1080));
+    
     MatWrite(str_x, fmapX);
     MatWrite(str_y, fmapY);
 
-    // cv::resize(fmapX, image_display[0], Size(2592, 1944));
-    // cv::resize(fmapY, image_display[1], Size(2592, 1944));
-    remap(image_input, image_result, fmapX, fmapY, INTER_LINEAR, BORDER_CONSTANT, Scalar(0, 0, 0));
-    cv::imwrite("Equirectangular.jpg",image_result);
-    cv::resize(image_result, image_display[0], Size(1920, 1080));
- 
-    imshow("Equirectangular", image_display[0]);
-    moveWindow("Equirectangular", 0, 0 );    
     while (1)
     {
         c = waitKey(100); 
