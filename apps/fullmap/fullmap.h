@@ -25,6 +25,8 @@ class FullMap
 
 public:
     FullMap();
+    void GenerateMaps(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRation, 
+        double P0, double P1, double P2, double P3, double P4, double P5);
     void Show();
     ~FullMap();
 

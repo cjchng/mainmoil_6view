@@ -1,3 +1,4 @@
+#include <iostream>
 #include "apps/car6view/car6view.h"
 #include "apps/measure/measure.h"
 #include "apps/stitch180/stitch180.h"
@@ -5,8 +6,34 @@
 char getch(void);
 int main(int argc, char *argv[])
 {
-                
-  // while(1) 
+// ./mainmoil senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5
+// ex. ./mainmoil 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36    
+if ( argc == 15 ) { // Generate X,Y Maps                
+            
+    double senWidth = atof(argv[1]); 
+    double senHeight = atof(argv[2]); 
+    int iCx = std::stoi (argv[3], nullptr, 0);
+    int iCy = std::stoi (argv[4], nullptr, 0);
+    double Ratio = atof(argv[5]); 
+    int imgWidth = std::stoi (argv[6], nullptr, 0);
+    int imgHeight = std::stoi (argv[7], nullptr, 0);
+    double caliRatio = atof(argv[8]); 
+    double P0 = atof(argv[9]); 
+    double P1 = atof(argv[10]); 
+    double P2 = atof(argv[11]); 
+    double P3 = atof(argv[12]); 
+    double P4 = atof(argv[13]); 
+    double P5 = atof(argv[14]); 
+    // std::cout << P5 << '\n';
+    FullMap *f;
+    f = new FullMap() ; 
+    f->GenerateMaps(senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
+        P0, P1, P2, P3, P4, P5);  
+    delete f ;  
+
+
+}
+else  
 {
 
     int opt;
@@ -48,7 +75,7 @@ cout << c << endl;
             FullMap *f;
             f = new FullMap() ; 
             f->Show();  
-            delete w ;          
+            delete f ;          
             break;                     
         case 27:
             exit(1);

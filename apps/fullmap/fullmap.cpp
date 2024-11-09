@@ -6,6 +6,35 @@ FullMap::FullMap()
 {
     md = new Moildev();
 }
+void FullMap::GenerateMaps(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
+double P0, double P1, double P2, double P3, double P4, double P5)
+{
+    char str_x[20], str_y[20];
+	md->Config("CLI_Input", senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
+        P0, P1, P2, P3, P4, P5 );  
+    double calibrationWidth = md->getImageWidth();
+   
+
+    double w = imgWidth;
+    double h = imgHeight;
+    m_ratio = w / calibrationWidth;
+
+    sprintf(str_x, "EquimatX"); 
+    sprintf(str_y, "EquimatY");
+
+    fmapX.create(h, w, CV_32F);
+    fmapY.create(h, w, CV_32F);
+
+    md->PanoramaM_Rt((float *)fmapX.data, (float *)fmapY.data, w, h, m_ratio, 180, 90, 0);
+
+    MatWrite(str_x, fmapX);
+    MatWrite(str_y, fmapY);
+
+    fmapX.release();
+    fmapY.release();
+
+
+}
 void FullMap::Show()
 {
 
