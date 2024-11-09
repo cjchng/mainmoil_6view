@@ -9,12 +9,29 @@ FullMap::FullMap()
 void FullMap::Show()
 {
 
+// Jimmy_20240627
+	md->Config("Jimmy_20240627", 1.55, 1.55,
+			944.0, 525.0, 1,
+			1920, 1080, 1,
+			0, 0, -20.772, 35.661, -13.097, 370.36
+				  );    
+
+/*
+// S-YUE
+	md->Config("twarm_usb210_d", 2, 2,
+			1066.0, 752.0, 1,
+			2048, 1536, 1,
+			0, 0, -55.204, 127.62, -55.955, 501.06
+				  );    
+*/
+
+/*
 	md->Config("endoscope", 2, 2,
 			1120.0, 520.0, 1,
 			1920, 1080, 3,
 			0, 0, 0, 0, 0, 130
 				  );
-
+*/
 /*
     md->Config("rpi_220_skc", 1.4, 1.4, 
                1300.0, 960.0, 1.0,
@@ -41,7 +58,7 @@ void FullMap::Show()
 */
     double calibrationWidth = md->getImageWidth();
     double iCy = md->getiCy();
-    image_input = imread("../images/endo01.jpg", IMREAD_COLOR);
+    image_input = imread("../images/Jimmy0627.png", IMREAD_COLOR);
     // image_input = imread("../images/image.jpg", IMREAD_COLOR);    
     // image_input = imread( "images/T265_01.jpg", IMREAD_COLOR);
     MediaType mediaType = MediaType::IMAGE_FILE;
