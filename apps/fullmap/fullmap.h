@@ -20,15 +20,32 @@ namespace Ui
     class FullMap;
 }
 
+enum class CmdType
+    {
+        NONE,
+        EQUIRECTANGULAR,
+        ANYPOINT,
+        ANYPOINT_QUAD,        
+        PANORAMA        
+    };
+
 class FullMap
 {
 
 public:
     FullMap();
-    void GenerateMaps(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRation, 
+    void GenerateMaps_Equi(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRation, 
         double P0, double P1, double P2, double P3, double P4, double P5);
+    void GenerateMaps_Anypoint(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
+        double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double Alpha, double Beta, double Zoom );        
+    void GenerateMaps_AnypointQuad(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
+        double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double Alpha[], double Beta[], double Zoom[] );
+    void GenerateMaps_Panorama(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRation, 
+        double P0, double P1, double P2, double P3, double P4, double P5, double alphaMax);        
     void Show();
     ~FullMap();
+
+    CmdType cmdType = CmdType::NONE;
 
 private:
     Moildev *md;
@@ -61,6 +78,9 @@ private:
     const double maxZoom = 12;
     int width_split = (1920 - 100) / 3;
     int height_split = width_split * 3 / 4;
+
+
+
 
     enum class MediaType
     {

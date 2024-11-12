@@ -6,7 +6,7 @@ FullMap::FullMap()
 {
     md = new Moildev();
 }
-void FullMap::GenerateMaps(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
+void FullMap::GenerateMaps_Equi(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
 double P0, double P1, double P2, double P3, double P4, double P5)
 {
     char str_x[20], str_y[20];
@@ -14,7 +14,6 @@ double P0, double P1, double P2, double P3, double P4, double P5)
         P0, P1, P2, P3, P4, P5 );  
     double calibrationWidth = md->getImageWidth();
    
-
     double w = imgWidth;
     double h = imgHeight;
     m_ratio = w / calibrationWidth;
@@ -33,8 +32,110 @@ double P0, double P1, double P2, double P3, double P4, double P5)
     fmapX.release();
     fmapY.release();
 
+}
+
+void FullMap::GenerateMaps_Anypoint(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
+double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double Alpha, double Beta, double Zoom )
+{
+    char str_x[20], str_y[20];
+	md->Config("CLI_Input", senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
+        P0, P1, P2, P3, P4, P5 );  
+    double calibrationWidth = md->getImageWidth();
+   
+    double w = imgWidth;
+    double h = imgHeight;
+    m_ratio = w / calibrationWidth;
+
+    sprintf(str_x, "AnypointX"); 
+    sprintf(str_y, "AnypointY");
+
+    fmapX.create(h, w, CV_32F);
+    fmapY.create(h, w, CV_32F);
+    if ( Mode == 0 )
+        md->AnyPointM((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha, Beta, Zoom, m_ratio);
+    else
+        md->AnyPointM2((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha, Beta, Zoom, m_ratio);
+    MatWrite(str_x, fmapX);
+    MatWrite(str_y, fmapY);
+
+    fmapX.release();
+    fmapY.release();
+}
+
+void FullMap::GenerateMaps_AnypointQuad(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
+double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double Alpha[], double Beta[], double Zoom[] )
+{
+    char str_x[20], str_y[20];
+	md->Config("CLI_Input", senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
+        P0, P1, P2, P3, P4, P5 );  
+    double calibrationWidth = md->getImageWidth();
+   
+    double w = imgWidth;
+    double h = imgHeight;
+    m_ratio = w / calibrationWidth;
+
+    sprintf(str_x, "AnypointQuadX"); 
+    sprintf(str_y, "AnypointQuadY");
+
+    fmapX.create(h, w, CV_32F);
+    fmapY.create(h, w, CV_32F);
+for ( int i=0; i< 4;i++) {
+    if ( Mode == 0 )
+        md->AnyPointM((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha[i], Beta[i], Zoom[i], m_ratio);
+    else
+        md->AnyPointM2((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha[i], Beta[i], Zoom[i], m_ratio);
+
+    cv::resize(fmapX, mapX[i], cv::Size(w/2, h/2));
+    cv::resize(fmapY, mapY[i], cv::Size(w/2, h/2));
+}
+    // Place each resized image in its correct position
+    mapX[0].copyTo(fmapX(cv::Rect(0, 0, w/2, h/2)));         // Top-left
+    mapX[1].copyTo(fmapX(cv::Rect(w/2, 0, w/2, h/2)));       // Top-right
+    mapX[2].copyTo(fmapX(cv::Rect(0, h/2, w/2, h/2)));       // Bottom-left
+    mapX[3].copyTo(fmapX(cv::Rect(w/2, h/2, w/2, h/2)));     // Bottom-right
+
+    mapY[0].copyTo(fmapY(cv::Rect(0, 0, w/2, h/2)));         // Top-left
+    mapY[1].copyTo(fmapY(cv::Rect(w/2, 0, w/2, h/2)));       // Top-right
+    mapY[2].copyTo(fmapY(cv::Rect(0, h/2, w/2, h/2)));       // Bottom-left
+    mapY[3].copyTo(fmapY(cv::Rect(w/2, h/2, w/2, h/2)));     // Bottom-right
+
+    MatWrite(str_x, fmapX);
+    MatWrite(str_y, fmapY);
+
+    fmapX.release();
+    fmapY.release();
+}
+
+void FullMap::GenerateMaps_Panorama(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
+double P0, double P1, double P2, double P3, double P4, double P5, double alphaMax)
+{
+    char str_x[20], str_y[20];
+	md->Config("CLI_Input", senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
+        P0, P1, P2, P3, P4, P5 );  
+    double calibrationWidth = md->getImageWidth();
+   
+    double w = imgWidth;
+    double h = imgHeight;
+    m_ratio = w / calibrationWidth;
+
+    sprintf(str_x, "PanoramaX"); 
+    sprintf(str_y, "PanoramaY");
+
+    fmapX.create(h, w, CV_32F);
+    fmapY.create(h, w, CV_32F);
+
+    md->PanoramaM((float *)fmapX.data, (float *)fmapY.data, w, h, m_ratio, alphaMax);
+
+    MatWrite(str_x, fmapX);
+    MatWrite(str_y, fmapY);
+
+    fmapX.release();
+    fmapY.release();
 
 }
+
+
+
 void FullMap::Show()
 {
 
