@@ -24,13 +24,18 @@ if (( argc == 16 )||( argc == 17 )||( argc == 20 )||( argc == 29 )) { // Generat
     FullMap *f;
     f = new FullMap() ; 
     f->cmdType = CmdType::NONE;
-    if (( argc == 16 ) && (strcmp( argv[1], "EQUIRECTANGULAR") == 0)) { 
+ // convert argv[1] to lowercase
+ for (int i = 0; i < strlen(argv[1]); i++) {
+    argv[1][i] = tolower(argv[1][i]);
+  }
+
+    if (( argc == 16 ) && (strcmp( argv[1], "equirectangular") == 0)) { 
         f->cmdType = CmdType::EQUIRECTANGULAR;
-    } else if (( argc == 20 ) && (strcmp( argv[1], "ANYPOINT") == 0)) { 
+    } else if (( argc == 20 ) && (strcmp( argv[1], "anypoint") == 0)) { 
         f->cmdType = CmdType::ANYPOINT;
-    } else if (( argc == 17 ) && (strcmp( argv[1], "PANORAMA") == 0)) { 
+    } else if (( argc == 17 ) && (strcmp( argv[1], "panorama") == 0)) { 
         f->cmdType = CmdType::PANORAMA;    
-    } else if (( argc == 29 ) && (strcmp( argv[1], "ANYPOINT_QUAD") == 0)) { 
+    } else if (( argc == 29 ) && (strcmp( argv[1], "anypoint_quad") == 0)) { 
         f->cmdType = CmdType::ANYPOINT_QUAD;
     }    
 if ( f->cmdType != CmdType::NONE ) {
