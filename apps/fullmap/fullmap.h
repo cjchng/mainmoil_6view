@@ -26,7 +26,8 @@ enum class CmdType
         EQUIRECTANGULAR,
         ANYPOINT,
         ANYPOINT_QUAD,        
-        PANORAMA        
+        PANORAMA,
+        EQUI2FISHEYE,        
     };
 
 class FullMap
@@ -42,6 +43,8 @@ public:
         double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double Alpha[], double Beta[], double Zoom[] );
     void GenerateMaps_Panorama(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRation, 
         double P0, double P1, double P2, double P3, double P4, double P5, double alphaMax);        
+    void GenerateMaps_Equi2Fisheye(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRation, 
+        double P0, double P1, double P2, double P3, double P4, double P5);    
     void Show();
     ~FullMap();
 

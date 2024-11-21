@@ -134,7 +134,61 @@ double P0, double P1, double P2, double P3, double P4, double P5, double alphaMa
 
 }
 
+void FullMap::GenerateMaps_Equi2Fisheye(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
+double P0, double P1, double P2, double P3, double P4, double P5)
+{
+    char str_x[20], str_y[20];
+	md->Config("CLI_Input", senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
+        P0, P1, P2, P3, P4, P5 );  
+    double calibrationWidth = md->getImageWidth();
+   
+    double w = imgWidth;
+    double h = imgHeight;
+    m_ratio = w / calibrationWidth;
 
+    sprintf(str_x, "EquimatRX"); 
+    sprintf(str_y, "EquimatRY");
+
+    fmapX.create(h, w, CV_32F);
+    fmapY.create(h, w, CV_32F);
+    mapX[0].create(h, w, CV_32F);
+    mapY[0].create(h, w, CV_32F);
+/*  // Clear Buffer
+    for ( int y=0; y<h; y++ ) 
+    for ( int x=0; x<w; x++ ) {
+        int idx1 = y * w + x;
+        *((float *)mapX[0].data + idx1) = (float)0;
+        *((float *)mapY[0].data + idx1) = (float)0;                
+    }
+*/    
+    md->PanoramaM_Rt((float *)fmapX.data, (float *)fmapY.data, w, h, m_ratio, 180, 90, 0);
+    
+for ( int y=0; y<h; y++ ) 
+    for ( int x=0; x<w; x++ ) {
+        int idx0 = y * w + x;
+        // printf("x=%d y=%d idx0=%d\n", x, y,idx0);
+        float x0 = *(((float *)fmapX.data)+idx0);
+        float y0 = *(((float *)fmapY.data)+idx0);
+        int idx1 = y0 * w + x0;
+        // for debug : 
+        // printf("%p\n",((float *)fmapX.data)+idx0) ;
+        // if (( x0 != 0 ) && (y0 != 0 ))
+        //     printf("x0=%f y0=%f idx1=%d\n", x0, y0, idx1);
+        // skc : 勿用以下兩行程式, x, y 會縮到 1/4 
+        // mapX[0].data[idx1] = x;
+        // mapY[0].data[idx1] = y;
+
+        *((float *)mapX[0].data + idx1) = (float)x;
+        *((float *)mapY[0].data + idx1) = (float)y;
+    }
+
+    MatWrite(str_x, mapX[0]);
+    MatWrite(str_y, mapY[0]);
+
+    fmapX.release();
+    fmapY.release();
+
+}
 
 void FullMap::Show()
 {

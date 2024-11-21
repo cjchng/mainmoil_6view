@@ -14,12 +14,13 @@ int main(int argc, char *argv[])
 //(20) ./mainmoil ANYPOINT senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode Alpha Beta Zoom 
 //(17) ./mainmoil PANORAMA senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 alphaMax
 //(29) ./mainmoil ANYPOINT senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode Alpha1 Beta1 Zoom1 Alpha2 Beta2 Zoom2 Alpha3 Beta3 Zoom3 Alpha4 Beta4 Zoom4   
+//(16) ./mainmoil EQUI2FISHEYE senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5
 // Examples
 // 1. ./mainmoil EQUIRECTANGULAR 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36    
 // 2. ./mainmoil ANYPOINT 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36  1   0  0  6    
 // 3. ./mainmoil PANORAMA 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36  110
 // 4. ./mainmoil ANYPOINT_QUAD 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36  1   0  0  6  0 -70  6  0  70  6 -45  45  6    
-
+// 5. ./mainmoil EQUI2FISHEYE 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36    
 if (( argc == 16 )||( argc == 17 )||( argc == 20 )||( argc == 29 )) { // Generate X,Y Maps                
     FullMap *f;
     f = new FullMap() ; 
@@ -37,7 +38,9 @@ if (( argc == 16 )||( argc == 17 )||( argc == 20 )||( argc == 29 )) { // Generat
         f->cmdType = CmdType::PANORAMA;    
     } else if (( argc == 29 ) && (strcmp( argv[1], "anypoint_quad") == 0)) { 
         f->cmdType = CmdType::ANYPOINT_QUAD;
-    }    
+    } else if (( argc == 16 ) && (strcmp( argv[1], "equi2fisheye") == 0)) { 
+        f->cmdType = CmdType::EQUI2FISHEYE;
+    }
 if ( f->cmdType != CmdType::NONE ) {
     int idx = 2;
     // Common Parameters
@@ -92,6 +95,10 @@ else if ( f->cmdType == CmdType::ANYPOINT_QUAD ) {
     f->GenerateMaps_Panorama(senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
         P0, P1, P2, P3, P4, P5, alphaMax);
         break;
+        case CmdType::EQUI2FISHEYE :
+    f->GenerateMaps_Equi2Fisheye(senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
+        P0, P1, P2, P3, P4, P5);
+        break;        
      
     }
 }
