@@ -1,16 +1,21 @@
 # Mainmoil 6view
 
-A sample project for moil system 6 views display, tested both on ubuntu 18.04 and raspberrypi( Raspbian Buster ) 
+A sample project for moil system 6 views display, tested both on ubuntu 18.04.. 22.04 and raspberrypi( Raspbian Buster ) 
 
 ![screenshot](https://github.com/cjchng/mainmoil_6view/blob/master/images/screenshot.png?raw=true)
 
 ## 1. Requirement 
 
 For RaspberryPi, please download Raspbian opetating system image :
+
 https://www.raspberrypi.org/downloads/raspbian/
+
 following the installing steps : 
+
 https://www.raspberrypi.org/documentation/installation/installing-images/
+
 or tutorial :
+
 https://oranwind.org/-raspberry-pi-win32-disk-imager-shao-lu-sd-qia-jiao-xue/
 
 If you already have Opencv installed, the followings can be skipped. Opencv can be version 3.x.x or version 4.x.x.  
@@ -28,24 +33,45 @@ If you already have Opencv installed, the followings can be skipped. Opencv can 
 	sudo apt install libatlas-base-dev gfortran
 	sudo apt install libopencv-dev python-opencv
 
-## 2. For Raspberry Pi/ NVIDIA Jetson TX2
+## 2. For Raspberry Pi, NVIDIA Jetson TX2 and Renesas RZ/V2H
 
-	For Raspberry Pi, please replace libmoildev.a with libmoilde_rpi.a 
+	For Raspberry Pi, please replace libmoildev.a with libmoildev_rpi.a
+``` 
 	cd lib
 	cp libmoildev_rpi.a libmoildev.a 
-
-	For NVIDIA Jetson TX2, please replace libmoildev.a with libmoilde_jetson.a 
+```
+	For NVIDIA Jetson TX2, please replace libmoildev.a with libmoildev_jetson.a 
+```	
 	cd lib
 	cp libmoildev_jetson.a libmoildev.a 
-
-
+```
+	For Renesas RZ/V2H, please replace libmoildev.a with libmoildev_rz.a
+```	 
+	cd lib
+	cp libmoildev_rz.a libmoildev.a 
+```	
 ## 3. Build and Run
 
+	Before the build, if you are using cross compiler, please set the environment by following the instructions like belows,
+	
+```
+	cd /opt/poky/3.1.31
+	unset LD_LIBRARY_PATH
+	. environment-setup-aarch64-poky-linux
+```	
+	
+
+```
 	mkdir build
 	cd build
 	cmake ..
 	make
+```
+	Run the executable, or copy the whole directory to SD card for other platforms,
+```
 	./mainmoil
+```
+
 
 ## 4. Key operations:
 
