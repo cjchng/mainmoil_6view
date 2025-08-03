@@ -80,11 +80,24 @@ double P0, double P1, double P2, double P3, double P4, double P5, int Mode, doub
     fmapX.create(h, w, CV_32F);
     fmapY.create(h, w, CV_32F);
 for ( int i=0; i< 4;i++) {
+    if( Alpha[i] == 9999 )  { /* blank */
+        fmapX = Mat::zeros(h, w, CV_32F); 
+        fmapY = Mat::zeros(h, w, CV_32F); 
+    }
+    else if( Alpha[i] == 10000 )  { /* Fisheye */
+        for ( int y=0; y<h; y++ )
+        for ( int x=0; x<w; x++ ) {
+            int idx = y * w + x;
+            *((float *)fmapX.data + idx) = (float)x;
+            *((float *)fmapY.data + idx) = (float)y;
+        }                
+    }
+    else {    
     if ( Mode == 0 )
         md->AnyPointM((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha[i], Beta[i], Zoom[i], m_ratio);
     else
         md->AnyPointM2((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha[i], Beta[i], Zoom[i], m_ratio);
-
+    }
     cv::resize(fmapX, mapX[i], cv::Size(w/2, h/2));
     cv::resize(fmapY, mapY[i], cv::Size(w/2, h/2));
 }
