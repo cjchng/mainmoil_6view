@@ -3,7 +3,7 @@
 A sample project for moil system 6 views display, tested both on ubuntu 18.04.. 22.04, Raspberrypi( Raspbian Buster ),
 NVIDIA Jetson TX2 and Renesas RZ/V2H.
 
-![screenshot](https://github.com/cjchng/mainmoil_6view/blob/master/images/screenshot.png?raw=true)
+![screen](images/screenshot.png)
 
 ## 1. Requirement 
 
@@ -22,71 +22,71 @@ https://oranwind.org/-raspberry-pi-win32-disk-imager-shao-lu-sd-qia-jiao-xue/
 If you already have Opencv installed, the followings can be skipped. Opencv can be version 3.x.x or version 4.x.x. 
 
 ```
-	sudo apt update
-	sudo apt upgrade
-	sudo apt install build-essential cmake pkg-config
-	sudo apt install libjpeg-dev libpng-dev libtiff-dev
-	sudo apt install software-properties-common
-	sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
-	sudo apt update
-	sudo apt install libjasper1 libjasper-dev
-	sudo apt update
-	sudo apt install libgtk-3-dev
-	sudo apt install libatlas-base-dev gfortran
-	sudo apt install libopencv-dev python-opencv
+sudo apt update
+sudo apt upgrade
+sudo apt install build-essential cmake pkg-config
+sudo apt install libjpeg-dev libpng-dev libtiff-dev
+sudo apt install software-properties-common
+sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+sudo apt update
+sudo apt install libjasper1 libjasper-dev
+sudo apt update
+sudo apt install libgtk-3-dev
+sudo apt install libatlas-base-dev gfortran
+sudo apt install libopencv-dev python-opencv
 ```
 
 ## 2. For Raspberry Pi, NVIDIA Jetson TX2 and Renesas RZ/V2H
 
 	For Raspberry Pi, please replace libmoildev.a with libmoildev_rpi.a
 ``` 
-	cd lib
-	cp libmoildev_rpi.a libmoildev.a 
+cd lib
+cp libmoildev_rpi.a libmoildev.a 
 ```
 	For NVIDIA Jetson TX2, please replace libmoildev.a with libmoildev_jetson.a 
 ```	
-	cd lib
-	cp libmoildev_jetson.a libmoildev.a 
+cd lib
+cp libmoildev_jetson.a libmoildev.a 
 ```
 	For Renesas RZ/V2H, please replace libmoildev.a with libmoildev_rz.a
 ```	 
-	cd lib
-	cp libmoildev_rz.a libmoildev.a 
+cd lib
+cp libmoildev_rz.a libmoildev.a 
 ```	
 ## 3. Build and Run
 
 	Before the build, if you are using cross compiler, please set the environment by following the instructions like belows,
 	
 ```
-	cd /opt/poky/3.1.31
-	unset LD_LIBRARY_PATH
-	. environment-setup-aarch64-poky-linux
+cd /opt/poky/3.1.31
+unset LD_LIBRARY_PATH
+. environment-setup-aarch64-poky-linux
 ```	
 	
 
 ```
-	mkdir build
-	cd build
-	cmake ..
-	make
+mkdir build
+cd build
+cmake ..
+make
 ```
 	If you build the project on x86_64, Respberry Pi or NDIDIA Jetson TX2, your can run the executable locally, 
 ```
 
-	./mainmoil
+./mainmoil
 ```
 	For corss compiler like aarch64-poky-linux-g++ for Renesas RZ/V2H, please copy the whole directory to SD card for other platforms,
 	
 	For example, for Renesas RZ/V2H, insert the SD card with linux image root mounted on /media/{user}/root, 
 ```	
-	cp -r mainmoil_6view /media/{user}/root/home/root   
+cp -r mainmoil_6view /media/{user}/root/home/root   
 ```
 
 	Then insert the SD Card to RZ/V2H, boot and run
 	
 ``` 
-	cd /home/root/mainmoil_6view/build
-	./mainmoil_6view
+cd /home/root/mainmoil_6view/build
+./mainmoil
 ```
 		
 	
