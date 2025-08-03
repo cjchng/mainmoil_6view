@@ -1,7 +1,6 @@
 #include "car6view.h"
-#include <opencv2/highgui.hpp>
 #define MAP_CACHE_ENABLED true
-#define USE_PICAMERA false
+#define USE_PICAMERA true
 #define FAST_ANYPOINT false
 Car6view::Car6view()
 {
@@ -13,19 +12,12 @@ void Car6view::Show()
 
     //cout << "test" << endl;
     //return ;
-	md->Config("Jimmy_20240627", 1.55, 1.55,
-			944.0, 525.0, 1,
-			1920, 1080, 1,
-			0, 0, -20.772, 35.661, -13.097, 370.36
-				  );    
-
-/*    
     md->Config("rpi_220", 1.4, 1.4,
                1320.0, 1017.0, 1.048,
                2592, 1944, 3.4, // 4.05
                // 0, 0, 0, 0, -47.96, 222.86
                0, 0, 0, 10.11, -85.241, 282.21);
-        
+    /*        
     md->Config("t265", 3, 3,
         427, 394, 1,
         848, 800, 1.68,
@@ -34,8 +26,7 @@ void Car6view::Show()
 */
     double calibrationWidth = md->getImageWidth();
     double iCy = md->getiCy();
-    image_input = imread("../images/Jimmy0627.png", IMREAD_COLOR);
-    // image_input = imread("../images/image.jpg", IMREAD_COLOR);
+    image_input = imread("../images/image.jpg", IMREAD_COLOR);
     // image_input = imread( "images/T265_01.jpg", IMREAD_COLOR);
     MediaType mediaType = MediaType::IMAGE_FILE;
     double w = image_input.cols;
@@ -164,8 +155,6 @@ void Car6view::DisplayCh(int ch)
         imshow("image_input", image_input_s);
         moveWindow("image_input", x_base + width_split, 0 + y_base);
 
-        namedWindow("Front");
-        resizeWindow("Front", width_split, height_split - y_base);
         remap(image_input, image_result, mapX[0], mapY[0], INTER_CUBIC, BORDER_CONSTANT, Scalar(0, 0, 0));
         cv::resize(image_result, image_display[0], Size(width_split, height_split - y_base));
         if ((mediaType == MediaType::CAMERA) && USE_PICAMERA)
@@ -339,14 +328,13 @@ void Car6view::camButtonClicked()
 
 void Car6view::openCamara()
 {
-    char c;      
-    cout << "Open camera"  << endl;
+    char c;
     cap0.open(0);
-    cap0.set(CAP_PROP_FRAME_WIDTH, fix_width);
-    cap0.set(CAP_PROP_FRAME_HEIGHT, fix_height);
+    cap0.set(CAP_PROP_FRAME_WIDTH, 2592);
+    cap0.set(CAP_PROP_FRAME_HEIGHT, 1944);
+
     if (cap0.isOpened())
     {
-        cout << "Camera opened"  << endl;
         mediaType = MediaType::CAMERA;
         currCh = 0;
         for (;;)
@@ -414,10 +402,6 @@ void Car6view::openCamara()
             }
         }
         mediaType = MediaType::NONE;
-    }
-    else {
-        cout << "Can not open camera" << endl;
-
     }
 }
 

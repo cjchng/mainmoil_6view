@@ -36,12 +36,9 @@ private:
     double m_ratio;
     int x_base = 80;
     int y_base = 30;
-    // S_YUE
-    int fix_width = 1920;
-    int fix_height = 1080;
     // rpi_220
-    // int fix_width = 2592;
-    // int fix_height = 1944;
+    int fix_width = 2592;
+    int fix_height = 1944;
     // T265
     //  int fix_width = 848;
     //  int fix_height = 800;

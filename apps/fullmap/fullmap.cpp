@@ -92,7 +92,7 @@ for ( int i=0; i< 4;i++) {
             *((float *)fmapY.data + idx) = (float)y;
         }                
     }
-    else {
+    else {    
     if ( Mode == 0 )
         md->AnyPointM((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha[i], Beta[i], Zoom[i], m_ratio);
     else
@@ -100,7 +100,6 @@ for ( int i=0; i< 4;i++) {
     }
     cv::resize(fmapX, mapX[i], cv::Size(w/2, h/2));
     cv::resize(fmapY, mapY[i], cv::Size(w/2, h/2));
-    
 }
     // Place each resized image in its correct position
     mapX[0].copyTo(fmapX(cv::Rect(0, 0, w/2, h/2)));         // Top-left
