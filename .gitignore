@@ -7,3 +7,4 @@ mainmoil
 stitchResult.jpg
 *.mp4
 build/
+.cache/
