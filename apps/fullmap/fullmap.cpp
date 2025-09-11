@@ -35,7 +35,7 @@ double P0, double P1, double P2, double P3, double P4, double P5)
 }
 
 void FullMap::GenerateMaps_Anypoint(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
-double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double Alpha, double Beta, double Zoom )
+double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double Alpha, double Beta, double Zoom, int Rev )
 {
     char str_x[20], str_y[20];
 	md->Config("CLI_Input", senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
@@ -55,15 +55,21 @@ double P0, double P1, double P2, double P3, double P4, double P5, int Mode, doub
         md->AnyPointM((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha, Beta, Zoom, m_ratio);
     else
         md->AnyPointM2((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha, Beta, Zoom, m_ratio);
+    if ( Rev == 1 ){
+
+    }
     MatWrite(str_x, fmapX);
     MatWrite(str_y, fmapY);
-
+if( Rev == 1) {
+    flip(fmapX, fmapX, -1);
+    flip(fmapY, fmapY, -1);
+}
     fmapX.release();
     fmapY.release();
 }
 
 void FullMap::GenerateMaps_AnypointQuad(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
-double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double Alpha[], double Beta[], double Zoom[] )
+double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double Alpha[], double Beta[], double Zoom[], int Rev[] )
 {
     char str_x[20], str_y[20];
 	md->Config("CLI_Input", senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 

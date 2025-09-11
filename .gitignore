@@ -8,3 +8,8 @@ stitchResult.jpg
 *.mp4
 build/
 .cache/
+Equimat*
+Anypoint*
+AnyPointQuad*
+Panorama*
+EquimatR*

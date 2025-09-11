@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 #include "apps/car6view/car6view.h"
 #include "apps/measure/measure.h"
@@ -9,21 +10,22 @@ int main(int argc, char *argv[])
     double senWidth, senHeight, Ratio, caliRatio, P0, P1, P2, P3, P4, P5;
     int iCx, iCy, imgWidth, imgHeight, Mode;
     double Alpha[4], Beta[4], Zoom[4], alphaMax; 
+    int Rev[4];
  
 //(16) ./mainmoil EQUIRECTANGULAR senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5
-//(20) ./mainmoil ANYPOINT senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode Alpha Beta Zoom 
+//(21) ./mainmoil ANYPOINT senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode Alpha Beta Zoom Reversed
 //(17) ./mainmoil PANORAMA senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 alphaMax
-//(29) ./mainmoil ANYPOINT senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode Alpha1 Beta1 Zoom1 Alpha2 Beta2 Zoom2 Alpha3 Beta3 Zoom3 Alpha4 Beta4 Zoom4   
+//(33) ./mainmoil ANYPOINT_QUAD senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode Alpha1 Beta1 Zoom1 Rev1 Alpha2 Beta2 Zoom2 Rev2 Alpha3 Beta3 Zoom3 Rev3 Alpha4 Beta4 Zoom4 Rev4  
 //(16) ./mainmoil EQUI2FISHEYE senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5
 // Examples
-// 1. ./mainmoil EQUIRECTANGULAR 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36    
-// 2. ./mainmoil ANYPOINT 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36  1   0  0  6    
+// 1. ./mainmoil EQUIRECTANGULAR 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.136    
+// 2. ./mainmoil ANYPOINT 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36  1   0  0  6  0   
 // 3. ./mainmoil PANORAMA 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36  110
-// 4. ./mainmoil ANYPOINT_QUAD 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36  1   0  0  6  0 -70  6  0  70  6 -45  45  6    
-//   (with ch4=blank) ./mainmoil ANYPOINT_QUAD 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36  1   0  -70  6  0 0  6  0  70  6 9999  0  0    
-//   (with ch4=fisheye) ./mainmoil ANYPOINT_QUAD 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36  1   0  -70  6  0 0  6  0  70  6 10000  0  0
+// 4. ./mainmoil ANYPOINT_QUAD 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.136  1   0  0  6  0 0 -70  6  0 0  70  6 0 -45  45  6 0   
+//   (with ch4=blank) ./mainmoil ANYPOINT_QUAD 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.136  1   0  -70  6  0 0 0  6  0  0  70  6 0 9999  0  0  0  
+//   (with ch4=fisheye) ./mainmoil ANYPOINT_QUAD 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.136  1   0  -70  6  0 0 0  6  0 0  70  6 0 10000  0  0 0
 // 5. ./mainmoil EQUI2FISHEYE 1.55 1.55 944 525 1 1920 1080 1   0 0 -20.772 35.661 -13.097 370.36    
-if (( argc == 16 )||( argc == 17 )||( argc == 20 )||( argc == 29 )) { // Generate X,Y Maps                
+if (( argc == 16 )||( argc == 21 )||( argc == 17 )||( argc == 33 )) { // Generate X,Y Maps                
     FullMap *f;
     f = new FullMap() ; 
     f->cmdType = CmdType::NONE;
@@ -34,11 +36,11 @@ if (( argc == 16 )||( argc == 17 )||( argc == 20 )||( argc == 29 )) { // Generat
 
     if (( argc == 16 ) && (strcmp( argv[1], "equirectangular") == 0)) { 
         f->cmdType = CmdType::EQUIRECTANGULAR;
-    } else if (( argc == 20 ) && (strcmp( argv[1], "anypoint") == 0)) { 
+    } else if (( argc == 21 ) && (strcmp( argv[1], "anypoint") == 0)) { 
         f->cmdType = CmdType::ANYPOINT;
     } else if (( argc == 17 ) && (strcmp( argv[1], "panorama") == 0)) { 
         f->cmdType = CmdType::PANORAMA;    
-    } else if (( argc == 29 ) && (strcmp( argv[1], "anypoint_quad") == 0)) { 
+    } else if (( argc == 33 ) && (strcmp( argv[1], "anypoint_quad") == 0)) { 
         f->cmdType = CmdType::ANYPOINT_QUAD;
     } else if (( argc == 16 ) && (strcmp( argv[1], "equi2fisheye") == 0)) { 
         f->cmdType = CmdType::EQUI2FISHEYE;
@@ -66,6 +68,7 @@ if ( f->cmdType == CmdType::ANYPOINT ) {
     Alpha[0] = atof(argv[idx++]); 
     Beta[0] = atof(argv[idx++]); 
     Zoom[0] = atof(argv[idx++]); 
+    Rev[0] = atoi(argv[idx++]); 
 }
 else if ( f->cmdType == CmdType::PANORAMA ) {
     alphaMax = atof(argv[idx++]); 
@@ -76,6 +79,7 @@ else if ( f->cmdType == CmdType::ANYPOINT_QUAD ) {
         Alpha[i] = atof(argv[idx++]); 
         Beta[i] = atof(argv[idx++]); 
         Zoom[i] = atof(argv[idx++]);
+        Rev[i] = atoi(argv[idx++]);
     } 
 }
 
@@ -87,11 +91,11 @@ else if ( f->cmdType == CmdType::ANYPOINT_QUAD ) {
         break;
         case CmdType::ANYPOINT :
     f->GenerateMaps_Anypoint(senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
-        P0, P1, P2, P3, P4, P5, Mode, Alpha[0], Beta[0], Zoom[0] );
+        P0, P1, P2, P3, P4, P5, Mode, Alpha[0], Beta[0], Zoom[0], Rev[0] );
         break;
         case CmdType::ANYPOINT_QUAD :
     f->GenerateMaps_AnypointQuad(senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
-        P0, P1, P2, P3, P4, P5, Mode, Alpha, Beta, Zoom );
+        P0, P1, P2, P3, P4, P5, Mode, Alpha, Beta, Zoom, Rev );
         break;           
         case CmdType::PANORAMA :
     f->GenerateMaps_Panorama(senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
