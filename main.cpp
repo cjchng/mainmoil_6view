@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 //(21) ./mainmoil ANYPOINT senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode Alpha Beta Zoom Reversed
 //(17) ./mainmoil PANORAMA senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 alphaMax
 //(33) ./mainmoil ANYPOINT_QUAD senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode Alpha1 Beta1 Zoom1 Rev1 Alpha2 Beta2 Zoom2 Rev2 Alpha3 Beta3 Zoom3 Rev3 Alpha4 Beta4 Zoom4 Rev4  
-//(30) ./mainmoil PANO_ANYPOINT senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode alphaMax alphaStart alphaEnd betaStart betaEnd Alpha1 Beta1 Zoom1 Rev1 Alpha2 Beta2 Zoom2 Rev2   
+//(31) ./mainmoil PANO_ANYPOINT senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5 Mode alphaMax alphaStart alphaEnd betaStart betaEnd Alpha1 Beta1 Zoom1 Rev1 Alpha2 Beta2 Zoom2 Rev2   
 //(16) ./mainmoil EQUI2FISHEYE senWidth senHeight iCx iCy Ratio imgWidth imgHeight caliRatio P0 P1 P2 P3 P4 P5
 
 // Examples
