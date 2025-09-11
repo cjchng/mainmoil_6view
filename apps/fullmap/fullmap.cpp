@@ -55,9 +55,11 @@ double P0, double P1, double P2, double P3, double P4, double P5, int Mode, doub
         md->AnyPointM((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha, Beta, Zoom, m_ratio);
     else
         md->AnyPointM2((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha, Beta, Zoom, m_ratio);
-    if ( Rev == 1 ){
-
-    }
+    if(Rev == 1) {
+        flip(fmapX, fmapX, -1);
+        flip(fmapY, fmapY, -1);
+        // or Rotate (fmapX, fmapX, 180);
+    }   
     MatWrite(str_x, fmapX);
     MatWrite(str_y, fmapY);
 if( Rev == 1) {
@@ -106,6 +108,11 @@ for ( int i=0; i< 4;i++) {
     }
     cv::resize(fmapX, mapX[i], cv::Size(w/2, h/2));
     cv::resize(fmapY, mapY[i], cv::Size(w/2, h/2));
+    if(Rev[i] == 1) {
+        flip(mapX[i], mapX[i], -1);
+        flip(mapY[i], mapY[i], -1);
+        // or Rotate (mapX[i], mapX[i], 180);
+    }   
 }
     // Place each resized image in its correct position
     mapX[0].copyTo(fmapX(cv::Rect(0, 0, w/2, h/2)));         // Top-left
