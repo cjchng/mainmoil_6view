@@ -132,6 +132,88 @@ for ( int i=0; i< 4;i++) {
     fmapY.release();
 }
 
+void FullMap::GenerateMaps_PanoAnypoint(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
+double P0, double P1, double P2, double P3, double P4, double P5, int Mode, double alphaMax, double alphaStart, double alphaEnd, double betaStart, double betaEnd, double Alpha[], double Beta[], double Zoom[], int Rev[] )
+{
+    char str_x[20], str_y[20];
+	md->Config("CLI_Input", senWidth, senHeight, iCx, iCy, Ratio, imgWidth, imgHeight, caliRatio, 
+        P0, P1, P2, P3, P4, P5 );  
+    double calibrationWidth = md->getImageWidth();
+   
+    double w = imgWidth;
+    double h = imgHeight;
+    m_ratio = w / calibrationWidth;
+
+    sprintf(str_x, "PanoAnypointX"); 
+    sprintf(str_y, "PanoAnypointY");
+
+    fmapX.create(h, w, CV_32F);
+    fmapY.create(h, w, CV_32F);
+
+    md->PanoramaM((float *)fmapX.data, (float *)fmapY.data, w, h, m_ratio, alphaMax);
+    /* crop */
+    // orig: alpha(y)=0.. alphaMax, beta(x)=0..360
+    int x_start = (int)( (betaStart/360.0) * w );
+    int y_start = (int)( ((alphaStart)/alphaMax) * h );
+    int width = (int)( ((betaEnd - betaStart)/360.0) * w );
+    int height = (int)( ((alphaEnd - alphaStart)/alphaMax) * h );
+
+    cout << "(" << x_start << "," << y_start << "," << width << "," << height << ")" << endl;
+    cv::Mat cropped_img = fmapX(cv::Rect(x_start, y_start, width, height));
+    // use mapX[2], mapY[2] as temp buffers
+    cv::resize(cropped_img, mapX[2], cv::Size(w, h/2));
+    cropped_img = fmapY(cv::Rect(x_start, y_start, width, height));
+    cv::resize(cropped_img, mapY[2], cv::Size(w, h/2));
+    if(Rev[2] == 1) {
+        flip(mapX[2], mapX[2], -1);
+        flip(mapY[2], mapY[2], -1);
+        // or Rotate (mapX[i], mapX[i], 180);
+    }  
+
+for ( int i=0; i< 2;i++) {
+    if( Alpha[i] == 9999 )  { /* blank */
+        fmapX = Mat::zeros(h, w, CV_32F); 
+        fmapY = Mat::zeros(h, w, CV_32F); 
+    }
+    else if( Alpha[i] == 10000 )  { /* Fisheye */
+        for ( int y=0; y<h; y++ )
+        for ( int x=0; x<w; x++ ) {
+            int idx = y * w + x;
+            *((float *)fmapX.data + idx) = (float)x;
+            *((float *)fmapY.data + idx) = (float)y;
+        }                
+    }
+    else {    
+    if ( Mode == 0 )
+        md->AnyPointM((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha[i], Beta[i], Zoom[i], m_ratio);
+    else
+        md->AnyPointM2((float *)fmapX.data, (float *)fmapY.data, w, h, Alpha[i], Beta[i], Zoom[i], m_ratio);
+    }
+    cv::resize(fmapX, mapX[i], cv::Size(w/2, h/2));
+    cv::resize(fmapY, mapY[i], cv::Size(w/2, h/2));
+    if(Rev[i] == 1) {
+        flip(mapX[i], mapX[i], -1);
+        flip(mapY[i], mapY[i], -1);
+        // or Rotate (mapX[i], mapX[i], 180);
+    }   
+}
+    mapX[2].copyTo(fmapX(cv::Rect(0, 0, w, h/2)));         // Top half
+    mapY[2].copyTo(fmapY(cv::Rect(0, 0, w, h/2)));         // Top half
+    // Place each resized image in its correct position    
+    mapX[0].copyTo(fmapX(cv::Rect(0, h/2, w/2, h/2)));       // Bottom-left
+    mapX[1].copyTo(fmapX(cv::Rect(w/2, h/2, w/2, h/2)));     // Bottom-right
+    
+    mapY[0].copyTo(fmapY(cv::Rect(0, h/2, w/2, h/2)));       // Bottom-left
+    mapY[1].copyTo(fmapY(cv::Rect(w/2, h/2, w/2, h/2)));     // Bottom-right
+
+    MatWrite(str_x, fmapX);
+    MatWrite(str_y, fmapY);
+
+    fmapX.release();
+    fmapY.release();
+}
+
+
 void FullMap::GenerateMaps_Panorama(double senWidth, double senHeight, int iCx, int iCy, double Ratio, int imgWidth,int imgHeight, double caliRatio, 
 double P0, double P1, double P2, double P3, double P4, double P5, double alphaMax)
 {
